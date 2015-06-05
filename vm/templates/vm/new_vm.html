@@ -1,0 +1,12 @@
+<h1>新規作成</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'vm:create' %}" method="post">
+{% csrf_token %}
+  <div>
+    <label>名前:</label>
+    <input type="text" name="name" />
+  </div>
+<input type="submit" value="作成" />
+</form>

@@ -8,6 +8,9 @@ def index(request):
     return HttpResponse(name)
 
 @login_required
+def new_vm(request):
+    return render(request, 'vm/new_vm.html', { 'user': request.user })
+
+@login_required
 def create(request):
-    name = request.user.get_username()
-    return HttpResponse(name)
+    return HttpResponse('WIP')
