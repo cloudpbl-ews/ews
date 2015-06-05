@@ -6,3 +6,8 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     name = request.user.get_username()
     return HttpResponse(name)
+
+@login_required
+def create(request):
+    name = request.user.get_username()
+    return HttpResponse(name)
