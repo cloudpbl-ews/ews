@@ -1,0 +1,47 @@
+<!-- VM一覧を表示するテンプレート -->
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}">
+<head>
+<meta charset="UTF-8">
+<title>VM一覧</title>
+</head>
+<body>
+
+<h3 class="page-header">お使いのVM一覧</h3>
+<hr>
+<div>
+<table border="1">
+      <thead>
+        <tr>
+          <th>番号</th>
+          <th>名前</th>
+          <th>稼働状態</th>
+          <th>UUID</th>
+        </tr>
+      </thead>
+      <tbody>
+	<tr>
+          <td>{{ number }}</td>
+          <td>{{ name }}</td>
+          <td>{{ status }}</td>
+          <td>{{ uuid }}</td>
+ 	  <td>
+		<input type="button" onclick="location.href='リンク先url'"value="起動">
+	  </td>
+ 	  <td>
+		<input type="button" onclick="location.href='リンク先url'"value="接続">
+	  </td>
+ 	  <td>
+		<input type="button" onclick="location.href='リンク先url'"value="削除">
+	  </td>
+        </tr>
+      </tbody>
+</table>
+</div>
+<br>
+<input type="button" onclick="location.href='リンク先url'"value="追加"><br>
+<input type="button" onclick="location.href='リンク先url'"value="ログアウト"><br>
+
+
+</body>
+</html>
