@@ -16,3 +16,4 @@ SECRET_KEY = 'please-set-very-long-words'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+PRODUCTION = False

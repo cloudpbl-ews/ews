@@ -1,5 +1,5 @@
 from django.conf import settings
-if settings.DEBUG:
-    from .dev import *
-else:
+if settings.PRODUCTION:
     from .production import *
+else:
+    from .dev import *
