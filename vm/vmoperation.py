@@ -55,6 +55,12 @@ class VMOperator():
     print 'CPU Time (in ns) = %d' % infos[2]
     print ''
 
+  def create_vm(self, xml) :
+    self.con.defineXML(xml)
+
+  def destroy_vm(self) :
+    raise
+
   def get_vminfo(self, uuid) :
     vm = self.con.lookupByUUID(uuid.bytes)
     if vm is None:
@@ -97,6 +103,7 @@ class VMOperator():
       uuid = UUID(bytes=self.con.lookupByName(vmname).UUID())
       vms.append(self.con.lookupByUUID(uuid.bytes))
     return vms
+
 
 
 
