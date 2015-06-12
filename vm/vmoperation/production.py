@@ -9,9 +9,9 @@
 
 # Notice: In this library UUID is used as vm handle.
 
-from uuid import UUID
 import os
 import libvirt
+from uuid import UUID
 
 class VMOperator():
   hypervisor_url = "qemu+tls://157.82.3.111/system"
@@ -19,15 +19,6 @@ class VMOperator():
     self.con = libvirt.open(self.hypervisor_url)
     if self.con is None:
       raise
-
- # def __init__(self, hypervisor_uri):
- #   if hypervisor_uri is None:
- #     raise
- #   self.uri = hypervisor_uri
-
- #   self.con = libvirt.open(self.uri)
- #   if self.con is None:
- #     raise
 
   def start(self, uuid) :
     os.system("virsh -c {:s} start {:s}".format(self.hypervisor_url, str(uuid)))
@@ -68,7 +59,7 @@ class VMOperator():
 
     infos = vm.info()
 
-    return {"same":vm.name(), "state": infos[0], "memory": infos[1]}
+    return {"name":vm.name(), "state": infos[0], "memory": infos[1]}
 
   def get_vmlist(self) :
     vms_uuid = []
@@ -103,9 +94,6 @@ class VMOperator():
       uuid = UUID(bytes=self.con.lookupByName(vmname).UUID())
       vms.append(self.con.lookupByUUID(uuid.bytes))
     return vms
-
-
-
 
 if __name__ == '__main__':
   op = VMOperator()
