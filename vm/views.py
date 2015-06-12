@@ -30,6 +30,7 @@ def index(request):
 
 @login_required
 def create_vm(request):
+  op = VMOperator()
   if(request.method == 'POST'):
     f = CreateVM(request.POST)
     if(f.is_valid()):
@@ -47,7 +48,8 @@ def create_vm(request):
       uuid_gen = uuid.uuid4()
       websocketport = "5777"
       passwd = "hoge"
-      tool.XMLGen(name, uuid_gen, memory, cpu, os, macaddr, websocketport, passwd)
+      xml = tool.XMLGen(name, uuid_gen, memory, cpu, os, macaddr, websocketport, passwd)
+      op.create_vm(xml)
       return HttpResponseRedirect('vm/success')
   else:
     f = CreateVM()
