@@ -22,5 +22,7 @@ urlpatterns = [
         {'template_name': 'accounts/login.html'}),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
         {'template_name': 'accounts/logged_out.html'}),
-    url(r'^', include('vm.urls', namespace="vm"))
+    url(r'^login/vm', include('vm.urls', namespace="vm")),
+    #url(r'^login/vm/new', include('vm.urls', namespace="vm")),
+    url(r'^login/noVNC/', include('noVNC.urls', namespace="noVNC")),
 ]

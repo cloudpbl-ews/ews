@@ -1,11 +1,9 @@
-from django.db import models
-from django.contrib.auth.models import User
+from django import forms
 
-# Create your models here.
-class VirtualMachine(models.Model):
-    name = models.CharField(max_length=100, default='your virtual machine')
-    uuid = models.CharField(max_length=100)
-    user = models.ForeignKey(User)
+class CreateVM(forms.Form):
+  name = forms.CharField()
+  memorysize = forms.ChoiceField(initial="1", choices = [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)])
+  cpu = forms.ChoiceField(initial="1", choices = [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)])
+  os = forms.ChoiceField(choices = [("FreeBSD10.1", "FreeBSD10.1"), ("Ubuntu14.04", "Ubuntu14.04"), ("Ubuntu12.04", "Ubuntu12.04"), ("Arch", "Arch"), ("debian8.0", "debian8.0")])
+  disksize = forms.IntegerField(initial="1024")
 
-    def __unicode__(self):
-        return self.name
