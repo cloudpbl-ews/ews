@@ -12,6 +12,7 @@
 // Globals defined here
 var Util = {};
 
+var INCLUDE_URI="/static/noVNC/include/";
 
 /*
  * Make arrays quack
@@ -413,9 +414,8 @@ Util.load_scripts = function (files) {
     for (var f = 0; f < files.length; f++) {
         script = document.createElement('script');
         script.type = 'text/javascript';
-        //script.src = Util.get_include_uri() + files[f];
-        script.src = "/static/noVNC/js/" + files[f];
-        console.log("loading script: " + script.src);
+        script.src = Util.get_include_uri() + files[f];
+        //console.log("loading script: " + script.src);
         script.onload = script.onreadystatechange = loadFunc;
         // In-order script execution tricks
         if (Util.Engine.trident) {
