@@ -1,0 +1,2 @@
+django >=1.8
+libvirt-python >= 1.2
