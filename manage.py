@@ -3,7 +3,10 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ews.settings.dev")
+    if os.environ.get('PRODUCTION'):
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ews.settings.production")
+    else:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ews.settings.dev")
 
     from django.core.management import execute_from_command_line
 
