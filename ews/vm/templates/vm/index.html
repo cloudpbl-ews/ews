@@ -1,0 +1,9 @@
+{% if vmnames %}
+<ul>
+{% for vmname in vmnames %}
+<li><a href="{% url 'noVNC:index'%}?host=157.82.3.111&port=5777&password=hoge">{{ vmname }}</a></li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No polls are available.</p>
+{% endif %}
