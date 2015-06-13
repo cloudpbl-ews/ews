@@ -12,8 +12,6 @@
 // Globals defined here
 var Util = {};
 
-var INCLUDE_URI="/static/noVNC/include/";
-
 /*
  * Make arrays quack
  */

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static from staticfiles %}
 <html>
 <head>
 
@@ -25,22 +26,25 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <!-- App Start Icon  -->
-    <link rel="apple-touch-startup-image" href="/static/noVNC/images/screen_320x460.png" />
+    <link rel="apple-touch-startup-image" href="{% static "noVNC/images/screen_320x460.png" %}" />
     <!-- For iOS devices set the icon to use if user bookmarks app on their homescreen -->
-    <link rel="apple-touch-icon" href="/static/noVNC/images/screen_57x57.png">
+    <link rel="apple-touch-icon" href="{% static "noVNC/images/screen_57x57.png" %}">
     <!--
     <link rel="apple-touch-icon-precomposed" href="images/screen_57x57.png" />
     -->
 
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/static/noVNC/include/base.css" title="plain">
+    <link rel="stylesheet" href="{% static "noVNC/include/base.css" %}" title="plain">
 
      <!--
     <script type='text/javascript'
         src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
     -->
-        <script src="/static/noVNC/include/util.js"></script>
+        <script>
+          var INCLUDE_URI="{% static "noVNC/include/" %}";
+        </script>
+        <script src="{% static "noVNC/include/util.js" %}"></script>
 </head>
 
 <body style="margin: 0px;">
