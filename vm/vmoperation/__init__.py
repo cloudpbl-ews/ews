@@ -19,6 +19,9 @@ class VMCreateOperation():
 
   def submit(self):
     data = self.vm.get_values()
+    print "passwd type ====",
+    print type(data['password'])
+
     xml = tool.XMLGen(
       data['name'], self.get_uuid(), data['memorysize'], data['cpu'], data['os'],
       self.get_macaddr(), data['vncport'], data['password'])
@@ -46,5 +49,6 @@ class VMSearchQuery():
     self.uuid = uuid
 
   def search(self):
+    print type(self.uuid)
     attrs = self.__class__.get_operator().get_vminfo(self.uuid)
     return attrs

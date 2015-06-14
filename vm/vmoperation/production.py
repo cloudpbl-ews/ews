@@ -53,6 +53,7 @@ class VMOperator():
     raise
 
   def get_vminfo(self, uuid) :
+    print "uuid", uuid
     vm = self.con.lookupByUUID(uuid.bytes)
     if vm is None:
       raise

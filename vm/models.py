@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from .vmoperation import VMCreateOperation, VMSearchQuery
+import uuid
 
 class VirtualMachine():
   """
@@ -10,6 +11,7 @@ class VirtualMachine():
   """
   @classmethod
   def from_record(cls, record):
+    print type(record.uuid)
     res = VMSearchQuery(record.uuid).search()
     return cls(instance=record, attributes=res)
 
@@ -41,6 +43,7 @@ class VirtualMachine():
       # TODO: Update attributes
       pass
     self.to_record().save()
+    print "This is save uuid type", type(self.to_record().uuid)
     return self
 
   def is_new(self):
@@ -64,8 +67,8 @@ class VirtualMachineRecord(models.Model):
   """ A record class whose instance is saved in the database. """
   user = models.ForeignKey(User)
   name = models.CharField(max_length=100, default='your virtual machine')
-  uuid = models.CharField(max_length=100)
-  vncport = models.CharField(max_length=100)
+  uuid = models.UUIDField(max_length=100)
+  vncport = models.IntegerField()
   password = models.CharField(max_length=100)
 
   @classmethod
