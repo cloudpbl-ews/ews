@@ -19,8 +19,6 @@ class VMCreateOperation():
 
   def submit(self):
     data = self.vm.get_values()
-    print "passwd type ====",
-    print type(data['password'])
 
     xml = tool.XMLGen(
       data['name'], self.get_uuid(), data['memorysize'], data['cpu'], data['os'],

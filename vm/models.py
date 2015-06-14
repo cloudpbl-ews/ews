@@ -11,7 +11,7 @@ class VirtualMachine():
   """
   @classmethod
   def from_record(cls, record):
-    es = VMSearchQuery(record.uuid).search()
+    res = VMSearchQuery(record.uuid).search()
     return cls(instance=record, attributes=res)
 
   def __init__(self, instance=None, attributes={}):
@@ -74,6 +74,15 @@ class VirtualMachineRecord(models.Model):
     user = vm.get_user()
     attrs = vm.get_values(['name', 'uuid', 'vncport', 'password'])
     return cls.objects.create(user=user, **attrs)
+
+  @classmethod
+  def find_vnc_port(cls):
+      vm_records = VirtualMachineRecord.objects.all()
+      vncport = 5700
+      for record in vm_records:
+        vncport = max(int(record.vncport), vncport)
+      vncport += 1
+      return vncport
 
   def __unicode__(self):
     return self.name
