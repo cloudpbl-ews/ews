@@ -5,7 +5,7 @@ Enpit Web Service(仮)
 サーバ上に仮想マシンを作成、操作、削除できる。
 
 # 開発ルール
-1. 作業前にはredmineでticket作成
+1. 作業前にはredmineでticket作成 (https://edu.jar.jp/redmine/issues/479 を親チケットにする)
 2. gitで作業ブランチを切る(masterでは作業しない)
 3. 事前に、slackにこれから行う作業内容を投稿
 4. こまめに作業ブランチにプッシュする
