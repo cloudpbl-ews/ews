@@ -1,7 +1,7 @@
-{% if vmnames %}
+{% if vms %}
 <ul>
-{% for vmname in vmnames %}
-<li><a href="{% url 'noVNC:index'%}?host=157.82.3.111&port=5777&password=hoge">{{ vmname }}</a></li>
+{% for vm in vms %}
+<li><a href="{% url 'noVNC:index'%}?host=157.82.3.111&port=5777&password=hoge">{{ vm.name }}</a>: {{ vm.state }}</li>
 {% endfor %}
 </ul>
 {% else %}
