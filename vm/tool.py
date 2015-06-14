@@ -68,7 +68,7 @@ def XMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport, 
     </console>
     <input type='mouse' bus='ps2'/>
     <input type='keyboard' bus='ps2'/>
-    <graphics type="vnc"  websocket="{websocketport:s}" passwd="{passwd:s}" listen="0.0.0.0"/>
+    <graphics type="vnc"  websocket="{websocketport:d}" passwd="{passwd:s}" listen="0.0.0.0"/>
     <sound model='ich6'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
     </sound>

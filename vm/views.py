@@ -6,7 +6,11 @@ from django.template.context_processors import csrf
 
 from vmoperation import VMOperator
 from .forms import CreateVM
-from .models import VirtualMachine
+from .models import VirtualMachine, VirtualMachineRecord
+
+import uuid
+import string
+import random
 
 @login_required
 def index(request):
@@ -19,7 +23,9 @@ def create_vm(request):
   if(request.method == 'POST'):
     f = CreateVM(request.POST)
     if (f.is_valid()):
-      f.create_instance(request.user).save()
+      vncport = VirtualMachineRecord.find_vnc_port()
+      passwd = random_str = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(10)])
+      f.create_instance(request.user, vncport, passwd).save()
       return HttpResponseRedirect('vm/success')
   else:
     f = CreateVM()

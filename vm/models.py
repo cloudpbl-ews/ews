@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from .vmoperation import VMCreateOperation, VMSearchQuery
+import uuid
 
 class VirtualMachine():
   """
@@ -64,8 +65,8 @@ class VirtualMachineRecord(models.Model):
   """ A record class whose instance is saved in the database. """
   user = models.ForeignKey(User)
   name = models.CharField(max_length=100, default='your virtual machine')
-  uuid = models.CharField(max_length=100)
-  vncport = models.CharField(max_length=100)
+  uuid = models.UUIDField(max_length=100)
+  vncport = models.IntegerField()
   password = models.CharField(max_length=100)
 
   @classmethod
@@ -73,6 +74,15 @@ class VirtualMachineRecord(models.Model):
     user = vm.get_user()
     attrs = vm.get_values(['name', 'uuid', 'vncport', 'password'])
     return cls.objects.create(user=user, **attrs)
+
+  @classmethod
+  def find_vnc_port(cls):
+      vm_records = VirtualMachineRecord.objects.all()
+      vncport = 5700
+      for record in vm_records:
+        vncport = max(int(record.vncport), vncport)
+      vncport += 1
+      return vncport
 
   def __unicode__(self):
     return self.name
