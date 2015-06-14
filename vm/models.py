@@ -11,8 +11,7 @@ class VirtualMachine():
   """
   @classmethod
   def from_record(cls, record):
-    print type(record.uuid)
-    res = VMSearchQuery(record.uuid).search()
+    es = VMSearchQuery(record.uuid).search()
     return cls(instance=record, attributes=res)
 
   def __init__(self, instance=None, attributes={}):
@@ -43,7 +42,6 @@ class VirtualMachine():
       # TODO: Update attributes
       pass
     self.to_record().save()
-    print "This is save uuid type", type(self.to_record().uuid)
     return self
 
   def is_new(self):

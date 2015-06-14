@@ -24,18 +24,11 @@ def create_vm(request):
     f = CreateVM(request.POST)
     if (f.is_valid()):
       vm_records = VirtualMachineRecord.objects.all()
-      print vm_records
-      print vm_records[0]
-      print vm_records[0].vncport
       vncport = 5700
       for record in vm_records:
-        print type(record.vncport)
-        print vncport
         vncport = max(int(record.vncport), vncport)
       vncport += 1
-      print "new vncport = ", vncport
       passwd = random_str = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(10)])
-      print "password type = ", type(passwd)
       f.create_instance(request.user, vncport, passwd).save()
       return HttpResponseRedirect('vm/success')
   else:
