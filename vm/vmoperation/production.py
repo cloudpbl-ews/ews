@@ -59,7 +59,7 @@ class VMOperator():
 
     infos = vm.info()
 
-    return {"name":vm.name(), "state": infos[0], "memory": infos[1]}
+    return {"name":vm.name(), "state": infos[0], "memorysize": infos[1]}
 
   def get_vmlist(self) :
     vms_uuid = []
