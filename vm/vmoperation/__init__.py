@@ -7,19 +7,20 @@ else:
 from .. import tool
 import uuid
 
-class VMCreateOperation():
+class VMOperationBase():
   @classmethod
   def get_operator(cls):
     if not hasattr(cls, 'operator'):
       cls.operator = VMOperator()
     return cls.operator
 
+class VMCreateOperation(VMOperationBase):
   def __init__(self, vm):
     self.vm = vm
 
   def submit(self):
     data = self.vm.get_values()
-    
+
     storagexml=tool.StorageXMLGen(data['name'], 1024*1024*1024*data['disksize'])
     print storagexml
     self.__class__.get_operator().create_storage(storagexml)
@@ -41,13 +42,15 @@ class VMCreateOperation():
       self.macaddr = tool.GenMac()
     return self.macaddr
 
-class VMSearchQuery():
-  @classmethod
-  def get_operator(cls):
-    if not hasattr(cls, 'operator'):
-      cls.operator = VMOperator()
-    return cls.operator
+class VMUpdateOperation(VMOperationBase):
+  def __init__(self, vm):
+    self.vm = vm
 
+  def submit():
+    # TODO
+    pass
+
+class VMSearchQuery(VMOperationBase):
   def __init__(self, uuid):
     self.uuid = uuid
 
