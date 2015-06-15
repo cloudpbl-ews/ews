@@ -42,8 +42,8 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>{hostname:s}</name>
   <uuid>{uuid:s}</uuid>
-  <memory unit='KiB'>{memorysize:s}</memory>
-  <currentMemory unit='KiB'>{memorysize:s}</currentMemory>
+  <memory unit='KiB'>{memorysize:d}</memory>
+  <currentMemory unit='KiB'>{memorysize:d}</currentMemory>
   <vcpu placement='static'>{cpu:s}</vcpu>
   <os>
     <type arch='x86_64' machine='pc-i440fx-1.7'>hvm</type>

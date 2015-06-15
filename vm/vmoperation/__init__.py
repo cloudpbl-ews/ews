@@ -25,8 +25,9 @@ class VMCreateOperation():
     self.__class__.get_operator().create_storage(storagexml)
     
     vmxml = tool.VMXMLGen(
-      data['name'], self.get_uuid(), data['memorysize'], data['cpu'], data['os'],
+      data['name'], self.get_uuid(), 1024*1024*int(data['memorysize']), data['cpu'], data['os'],
       self.get_macaddr(), data['vncport'], data['password'])
+    print vmxml
     self.__class__.get_operator().define_vm(vmxml)
     self.__class__.get_operator().start_vm(data['name'])
     return self
