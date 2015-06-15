@@ -33,4 +33,4 @@ def create_vm(request):
 
 @login_required
 def success(request):
-    return HttpResponse('created vm successfully')
+    return render_to_response('vm/success.html')

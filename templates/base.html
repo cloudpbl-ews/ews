@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  {% block additional_head %}{% endblock %}
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-inverse" id="navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">EWS - enPiT Web Service</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login">login</a></li>
+            <li><a href="/logout">logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="row">
+      <div class="col-lg-3" id="sidebar">
+        <div class="list-group" style="cursor: pointer;">
+          <a class="list-group-item" href="/">Top</a>
+          <a class="list-group-item" href="/login/vm">VM List</a>
+          <a class="list-group-item" href="/login/vm/create_vm">Create VM</a>
+        </div>
+      </div>
+      <div class="col-lg-9" id="content">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    
+    <div id="footer">
+      Copyright(c) 2015 group-2015-1-a1-course
+    </div>
+  </div>
+
+  <script src="//code.jquery.com/jquery-2.1.4.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script>
+  </script>
+  {% block additional_body %}{% endblock %}
+</body>
+</html>
