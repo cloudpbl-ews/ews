@@ -16,7 +16,12 @@ import random
 def index(request):
   vm_records = request.user.virtualmachinerecord_set.all()
   vms = [VirtualMachine.from_record(vm) for vm in vm_records]
-  return render(request, 'vm/index.html', {'vms': vms})
+  newvm = []
+  for vm in vms:
+    if(vm.name == "MMM"):
+      newvm.append(vm)
+  return render(request, 'vm/index.html', {'vms': newvm})
+  #return render(request, 'vm/index.html', {'vms': vms})
 
 @login_required
 def create_vm(request):

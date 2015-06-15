@@ -12,7 +12,32 @@ def GenMac():
 
 
 
-def XMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport, passwd ):
+def StorageXMLGen(hostname, disksize):
+  #<key>/root/vmimage/{hostname:s}.img</key>
+  #<path>/root/vmimage/{hostname:s}.img</path>
+  return """
+<volume type='file'>
+  <name>{hostname:s}.img</name>
+  <key> /var/lib/libvirt/images/{hostname:s}.img</key>
+  <source>
+  </source>
+  <capacity unit='bytes'>{disksize:d}</capacity>
+  <allocation unit='bytes'>{disksize:d}</allocation>
+  <target>
+    <path>/var/lib/libvirt/images/{hostname:s}.img</path>
+    <format type='raw'/>
+    <permissions>
+      <mode>0600</mode>
+      <owner>107</owner>
+      <group>112</group>
+    </permissions>
+  </target>
+</volume>""".format(hostname=hostname,
+      disksize=disksize)
+
+
+def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport, passwd):
+      #<source file='/root/vmimage/{hostname:s}.img'/>
   return """
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>{hostname:s}</name>
@@ -23,6 +48,7 @@ def XMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport, 
   <os>
     <type arch='x86_64' machine='pc-i440fx-1.7'>hvm</type>
     <boot dev='hd'/>
+    <boot dev='cdrom'/>
   </os>
   <features>
     <acpi/>
@@ -37,15 +63,15 @@ def XMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport, 
   <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw'/>
-      <source file='/var/lib/libvirt/images/{image_file:s}'/>
+      <source file='/var/lib/libvirt/images/{hostname:s}.img'/>
       <target dev='hda' bus='ide'/>
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
     </disk>
-    <disk type='block' device='cdrom'>
-      <driver name='qemu' type='raw'/>
+    <disk type='file' device='cdrom'>
+    <driver name='qemu'/>
+      <source file='/var/lib/libvirt/iso/FreeBSD-10.1-RELEASE-amd64-bootonly.iso' />
       <target dev='hdc' bus='ide'/>
       <readonly/>
-      <address type='drive' controller='0' bus='1' target='0' unit='0'/>
     </disk>
     <controller type='usb' index='0'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
