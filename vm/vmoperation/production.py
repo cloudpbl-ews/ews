@@ -46,8 +46,15 @@ class VMOperator():
     print 'CPU Time (in ns) = %d' % infos[2]
     print ''
 
-  def create_vm(self, xml) :
+
+  def create_storage(self, xml) :
+    self.con.storagePoolLookupByName("default").createXML(xml)
+
+  def define_vm(self, xml) :
     self.con.defineXML(xml)
+  
+  def start_vm(self, hostname) :
+    self.con.lookupByName(hostname).create()
 
   def destroy_vm(self) :
     raise
