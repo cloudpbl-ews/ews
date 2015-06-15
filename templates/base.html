@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  {% block additional_head %}{% endblock %}
 </head>
 <body>
 <div class="container">
@@ -45,5 +46,6 @@
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script>
   </script>
+  {% block additional_body %}{% endblock %}
 </body>
 </html>
