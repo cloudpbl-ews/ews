@@ -13,8 +13,6 @@ def GenMac():
 
 
 def StorageXMLGen(hostname, disksize):
-  #<key>/root/vmimage/{hostname:s}.img</key>
-  #<path>/root/vmimage/{hostname:s}.img</path>
   return """
 <volume type='file'>
   <name>{hostname:s}.img</name>
@@ -69,7 +67,7 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
     </disk>
     <disk type='file' device='cdrom'>
     <driver name='qemu'/>
-      <source file='/var/lib/libvirt/iso/FreeBSD-10.1-RELEASE-amd64-bootonly.iso' />
+      <source file='/var/lib/libvirt/iso/{image_file:s}' />
       <target dev='hdc' bus='ide'/>
       <readonly/>
     </disk>
