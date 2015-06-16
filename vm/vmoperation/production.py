@@ -52,8 +52,8 @@ class VMOperator():
 
   def define_vm(self, xml) :
     self.con.defineXML(xml)
-  
-  def start_vm(self, hostname) :
+
+  def start_by_hostname(self, hostname) :
     self.con.lookupByName(hostname).create()
 
   def destroy_vm(self) :

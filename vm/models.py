@@ -74,7 +74,13 @@ class VirtualMachine(object):
   def is_new(self):
     return self.uuid is None
 
+  def get_disksize_byte(self):
+    # a unit of disksize is giga byte.
+    return 1024 * 1024 * 1024 * self.disksize
 
+  def get_memorysize_kilobyte(self):
+    # a unit of disksize is giga byte.
+    return 1024 * 1024 * self.memorysize
 
 class VirtualMachineRecord(models.Model):
   """ A record class whose instance is saved in the database. """
