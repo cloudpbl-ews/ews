@@ -4,7 +4,29 @@ from django.forms.models import model_to_dict
 from .vmoperation import VMCreateOperation, VMSearchQuery
 import uuid
 
-class VirtualMachine():
+def model_alias(name):
+  "Define an alias property to my instance"
+  def fget(self):
+    return getattr(self.instance, name)
+  def fset(self, val):
+    return setattr(self.instance, name, val)
+  return property(fget, fset)
+
+def attribute(wrapper = (lambda x: x), doc = ''):
+  "Define a property always having the specified type"
+  class container():
+    value = None
+    def fget(cont, self):
+      return cont.value
+    def fset(cont, self, val):
+      if val is None:
+        cont.value = None
+      else:
+        cont.value = wrapper(val)
+  dummy = container()
+  return property(dummy.fget, dummy.fset)
+
+class VirtualMachine(object):
   """
   Having full information about a virtual machine
   from the database and the hypervisor.
@@ -14,52 +36,45 @@ class VirtualMachine():
     res = VMSearchQuery(record.uuid).search()
     return cls(instance=record, attributes=res)
 
-  def __init__(self, instance=None, attributes={}):
-    self.instance = instance
-    if not instance is None:
-      attrs = {}
-      attrs.update(model_to_dict(instance))
-      attrs.update(attributes)
-      attributes = attrs
-    self.attributes = attributes
-    self._set_attrs()
+  user = model_alias('user')
+  name = model_alias('name')
+  uuid = model_alias('uuid')
+  vncport = model_alias('vncport')
+  password = model_alias('password')
 
-  def _set_attrs(self):
-    keys = ['name', 'uuid', 'vncport', 'password', 'state', 'memorysize', 'os', 'password', 'vncport']
-    for key in keys:
-      if self.attributes.has_key(key):
-        self.__dict__[key] = self.attributes[key]
+  # Define attributes' types
+  state = attribute(unicode)
+  cpu = attribute(unicode)
+  os = attribute(unicode)
+  memorysize = attribute(int)
+  disksize = attribute(int)
+
+  def __init__(self, instance=None, attributes={}):
+    if instance is None:
+      self.instance = VirtualMachineRecord()
+    else:
+      self.instance = instance
+    for k, v in attributes.items():
+      # Set only decleared attrs.
+      if hasattr(self.__class__, k):
+        setattr(self, k, v)
 
   def to_record(self):
-    if self.instance is None:
-      self.instance = VirtualMachineRecord.from_virtual_machine(self)
     return self.instance
 
   def save(self):
     if self.is_new():
-      self.attributes['uuid'] = VMCreateOperation(self).submit().get_uuid()
+      self.uuid = VMCreateOperation(self).submit().get_uuid()
+      self.to_record().save()
     else:
       # TODO: Update attributes
       pass
-    self.to_record().save()
     return self
 
   def is_new(self):
-    return not self.attributes.has_key('uuid')
+    return self.uuid is None
 
-  def get_uuid(self):
-    return self.attributes.get('uuid')
 
-  def get_user(self):
-    return self.attributes.get('user')
-
-  def get_values(self, keys=None):
-    if keys is None:
-      keys = self.attributes.keys()
-    values = {}
-    for key in keys:
-      values[key] = self.attributes[key]
-    return values
 
 class VirtualMachineRecord(models.Model):
   """ A record class whose instance is saved in the database. """
@@ -70,19 +85,13 @@ class VirtualMachineRecord(models.Model):
   password = models.CharField(max_length=100)
 
   @classmethod
-  def from_virtual_machine(cls, vm):
-    user = vm.get_user()
-    attrs = vm.get_values(['name', 'uuid', 'vncport', 'password'])
-    return cls.objects.create(user=user, **attrs)
-
-  @classmethod
   def find_vnc_port(cls):
-      vm_records = VirtualMachineRecord.objects.all()
-      vncport = 5700
-      for record in vm_records:
-        vncport = max(int(record.vncport), vncport)
-      vncport += 1
-      return vncport
+    vm_records = VirtualMachineRecord.objects.all()
+    vncport = 5700
+    for record in vm_records:
+      vncport = max(int(record.vncport), vncport)
+    vncport += 1
+    return vncport
 
   def __unicode__(self):
     return self.name
