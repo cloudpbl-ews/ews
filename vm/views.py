@@ -23,6 +23,7 @@ def create_vm(request):
   if(request.method == 'POST'):
     f = CreateVM(request.POST)
     if (f.is_valid()):
+      # TODO: move these default values to models
       vncport = VirtualMachineRecord.find_vnc_port()
       passwd = random_str = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(10)])
       f.create_instance(request.user, vncport, passwd).save()
