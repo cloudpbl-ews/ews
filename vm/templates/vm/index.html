@@ -153,19 +153,20 @@ $(function () {
               type: "GET",
               dataType: "text",
               success: function(data) {
+                  var plotdata = new Array();
                   data = data.split(/\r\n|\r|\n/);
-                  for(j=0; j<data.length; j++){
+                  for(j=0; j<data.length-2; j++){
                      if(isNaN(data[j].split(":")[1])){
-                       data[j] = 0;
+                       plotdata[j] = 0;
                      }else{
-                       data[j] = Number(data[j].split(":")[1]);
+                       plotdata[j] = Number(data[j].split(":")[1]);
                      }
                   }
                   if(idx in drawlist){
-                    drawlist[idx].push({data: data});
+                    drawlist[idx].push({data: plotdata});
                   }else{
                     drawlist[idx] = [];
-                    drawlist[idx].push({data: data});
+                    drawlist[idx].push({data: plotdata});
                   }
               }
             });
@@ -206,6 +207,7 @@ Timer = function() {
   if (time > 2) {
     Draw();
     time = 0;
+    drawlist = new Object();
     SendRequest();
     return;
   }
