@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <meta charset=utf-8>
+      <script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'></script>
+      <script type="text/javascript" src="js/highcharts.js"></script>
+</head>
+<body>
+
+<table border=H3>
+        <tr>
+            <td>VMname</td>
+            <td>Display</td>
+            <td width="100%">CPUusage</td>
+        </tr>
+        <tr>
+            <td>PIYO</td>
+            <td><a href="/noVNC/?host=157.82.3.111&port=5801&password=eWVMVtgoOL"  >Display</a></td>
+            <td width="100%"><div id='container'></div></td>
+        </tr>
+        <tr>
+            <td>hiyopiyo</td>
+            <td><a href="/noVNC/?host=157.82.3.111&port=5802&password=q8kKRrzVQD"  >hiyopiyo</a></td>
+            <td width="100%"><div id='container2'></div></td>
+        </tr>
+
+</table>
+</ul>
+
+
+<script type="text/javascript">
+var chart;
+
+function draw() {
+//<div id="container" style="width: 1000px; height: 400px; margin: 0 auto"></div>
+      console.log("draw1");
+      options = {
+              // 出力先を指定
+              chart :{renderTo : "container",
+                      type : "line",
+              },
+              title : {text: ""},
+              xAxis : {title: {text: ""}},
+              yAxis : {title: {text: ""}}
+      }
+
+      console.log("ajax1");
+jQuery.ajax({ 
+url: "data/cpuusage/04505ee9-6b9c-41a5-a801-3b04f47ce66f.txt",
+type: "GET",
+dataType: "text",
+success: function(content) {
+      console.log("success1");
+              // 読み込んだデータを","で区切って配列にする
+              content = content.split(/\r\n|\r|\n/);
+              // それぞれの要素を数値に変換する
+              console.log(content)
+              for(i=0; i<content.length; i++){
+                      if(isNaN(content[i].split(":")[1])){
+                        content[i] = 0;
+                      }else{
+                      content[i] = Number(content[i].split(":")[1]);
+                      }
+              }
+              options['series'] = [{ data: content}];
+              chart = new Highcharts.Chart(options);
+}
+      } );
+
+};
+
+
+
+var chart2;
+function draw2() {
+      console.log("draw2");
+      options = {
+              // 出力先を指定
+              chart :{renderTo : "container",
+                      type : "line",
+              },
+              title : {text: ""},
+              xAxis : {title: {text: ""}},
+              yAxis : {title: {text: ""}}
+      }
+
+
+      console.log("ajax2");
+jQuery.ajax({ 
+url: "data/cpuusage/04505ee9-6b9c-41a5-a801-3b04f47ce66f.txt",
+type: "GET",
+dataType: "text",
+success: function(content) {
+      console.log("success2");
+              // 読み込んだデータを","で区切って配列にする
+              content = content.split(/\r\n|\r|\n/);
+              // それぞれの要素を数値に変換する
+              console.log(content)
+              for(i=0; i<content.length; i++){
+                      if(isNaN(content[i].split(":")[1])){
+                        content[i] = 0;
+                      }else{
+                      content[i] = Number(content[i].split(":")[1]);
+                      }
+              }
+              options['series'] = [{ data: content}];
+              chart2 = new Highcharts.Chart(options);
+        }
+      } );
+
+};
+
+var StartTimer, StopTimer, Timer, time, timerID;
+
+time = 2;
+timerID = 0;
+
+StartTimer = function() {
+  timerID = setInterval(Timer/*定期的に呼び出す関数名*/, 1000/*呼び出す間隔*/);
+};
+
+StopTimer = function() {
+  timerID= 0;
+  //clearOnterval(timerID);
+};
+
+Timer = function() {
+  time = time + 1;
+  console.log(time);
+  if (time > 2) {
+    draw();
+    draw2();
+    time = 0;
+    return;
+  }
+};
+
+StartTimer();
+
+</script>
+
+</body>
+</html>

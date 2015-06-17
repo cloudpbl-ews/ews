@@ -16,7 +16,8 @@ import random
 def index(request):
   vm_records = request.user.virtualmachinerecord_set.all()
   vms = [VirtualMachine.from_record(vm) for vm in vm_records]
-  return render(request, 'vm/index.html', {'vms': vms})
+  cpus = [1]
+  return render(request, 'vm/index.html', {'vms': vms, 'cpus': cpus})
 
 @login_required
 def create_vm(request):

@@ -1,20 +1,5 @@
-{% extends "base.html" %}
 
-{% load static from staticfiles %}
-
-{% block title %}EWS - VM List{% endblock %}
-
-{% block additional_head %}
-{% endblock %}
-{% block content %}
-
-<script src="{% static "statistics/js/jquery-1.8.2.min.js" %}"></script>
-<script src="{% static "statistics/js/highcharts.js" %}"></script>
-
-
-<script type="text/javascript">
-
-$(function () {
+function CPUusage() {
     Highcharts.SparkLine = function (options, callback) {
         var defaultOptions = {
             chart: {
@@ -48,8 +33,6 @@ $(function () {
                 tickPositions: []
             },
             yAxis: {
-              min:0,
-              max:1,
                 endOnTick: false,
                 startOnTick: false,
                 labels: {
@@ -77,7 +60,7 @@ $(function () {
             },
             plotOptions: {
                 series: {
-                    animation: false,
+                    //animation: false,
                     lineWidth: 1,
                     shadow: false,
                     states: {
@@ -106,17 +89,17 @@ $(function () {
         return new Highcharts.Chart(options, callback);
     };
 
-    $tds = $("td[data-sparkline]"),
-    console.log("tds!!!!!!!!!!!!!!");
-    console.log($tds);
-    fullLen = $tds.length,
-    n = 0;
+        $tds = $("td[data-sparkline]"),
+        fullLen = $tds.length,
+        n = 0;
 
     function getAndDraw($td){
+            console.log("td");
+            console.log($td);
             stringdata = $td.data('sparkline');
             console.log(stringdata);
             jQuery.ajax({ 
-              url: "/static/statistics/data/cpuusage/"+stringdata,
+              url: stringdata,
               type: "GET",
               dataType: "text",
               success: function(data) {
@@ -147,6 +130,7 @@ $(function () {
     }
     
     function doChunk() {
+      console.log("debug");
         var i,
             len = $tds.length,
             $td,
@@ -158,59 +142,6 @@ $(function () {
 
         }
     }
-
-
-var StartTimer, StopTimer, Timer, time, timerID;
-
-time = 2;
-timerID = 0;
-
-StartTimer = function() {
-  timerID = setInterval(Timer/*定期的に呼び出す関数名*/, 1000/*呼び出す間隔*/);
-};
-
-StopTimer = function() {
-  timerID= 0;
-  //clearOnterval(timerID);
-};
-
-Timer = function() {
-  time = time + 1;
-  console.log(time);
-  if (time > 2) {
     doChunk();
-    time = 0;
-    return;
-  }
 };
 
-StartTimer();
-
-
-});
-</script>
-
-
-{% if vms %}
-<ul>
-<table border=H3>
-  <tr>
-    <td>VMname</td>
-    <td>Display</td>
-    <td>state</td>
-    <td width="100%">CPUusage</td>
-  </tr>
-  {% for vm in vms %}
-  <tr>
-    <td>{{vm.name}}</td>
-    <td><a href="{% url 'noVNC:index'%}?host=157.82.3.111&port={{vm.vncport}}&password={{vm.password}}"  ><center><img src="{% static "vm/png/glyphicons-87-display.png" %}"/></center></a></td>
-    <td> {{ vm.state }}</td>
-    <td data-sparkline=  "{% for cpu in cpus %}{% if forloop.last %}{{vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
-  </tr>
-{% endfor %}
-</table>
-</ul>
-{% else %}
-<p>You have no VMs</p>
-{% endif %}
-{% endblock %}
