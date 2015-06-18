@@ -32,8 +32,6 @@ class CreateVM(forms.Form):
       ("Gentoo-install-amd64-minimal-20120223.iso", "Gentoo-install-amd64-minimal-20120223"),
       )
   )
-
-
   ]
 
   name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}))
