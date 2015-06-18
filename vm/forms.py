@@ -1,11 +1,6 @@
 from django import forms
 from .models import VirtualMachine
 
-
-memory_field = forms.ChoiceField(initial="1", choices = [(1,"1G"),(2,"2G"),(3,"3G"),(4,"4G"),(5,"5G"),(6,"6G"),(7,"7G"),(8,"8G")])
-cpu_field = forms.ChoiceField(initial="1", choices = [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)])
-disksize_field = forms.IntegerField(initial="50")
-
 class CreateVM(forms.Form):
   memorychoice = [(1,"1G"),(2,"2G"),(3,"3G"),(4,"4G"),(5,"5G"),(6,"6G"),(7,"7G"),(8,"8G")]
   cpuchoice =[(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)]
