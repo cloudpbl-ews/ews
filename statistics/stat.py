@@ -5,7 +5,7 @@ import rrdtool
 
 hypervisor_url = "qemu+tls://157.82.3.111/system"
 
-statpath = "/home/motomu/work/static/statistics/data/"
+statpath = "../static/statistics/data/"
 cpurrdpath = statpath + "cpu/"
 cpuusagepath = statpath + "cpuusage/"
 

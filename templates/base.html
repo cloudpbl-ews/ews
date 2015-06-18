@@ -2,6 +2,8 @@
 {% load static from staticfiles %}
 <html>
 <head>
+  <script src="{% static "statistics/js/jquery-1.11.3.min.js" %}"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>{% block title %}{% endblock %}</title>
 
@@ -43,8 +45,6 @@
     </div>
   </div>
 
-  <script src="{% static "statistics/js/jquery-1.11.3.min.js" %}"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script>
   </script>
   {% block additional_body %}{% endblock %}
