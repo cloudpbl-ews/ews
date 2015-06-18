@@ -1,1 +1,2 @@
 django >=1.8
+rrdtool >= 1.4.7
