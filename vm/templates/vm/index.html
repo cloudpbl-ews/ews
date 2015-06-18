@@ -8,8 +8,6 @@
 {% endblock %}
 {% block content %}
 
-<script src="{% static "statistics/js/jquery-1.8.2.min.js" %}"></script>
-<script src="{% static "statistics/js/highcharts.js" %}"></script>
 
     <style type="text/css">
   .highcharts-tooltip>span {
@@ -21,6 +19,9 @@
   }
   </style>
 
+{% endblock %}
+{% block additional_body %}
+<script src="{% static "statistics/js/highcharts.js" %}"></script>
 <script type="text/javascript">
 
 $(function () {
