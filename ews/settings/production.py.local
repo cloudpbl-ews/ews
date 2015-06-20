@@ -16,3 +16,5 @@ SECRET_KEY = 'please-set-very-long-words'
 
 DEBUG = False
 PRODUCTION = True
+
+HYPERVISOR_URL = 127.0.0.1
