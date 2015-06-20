@@ -68,7 +68,8 @@ class VMOperator():
 
     infos = vm.info()
 
-    return {"name":vm.name(), "state": infos[0], "memorysize": infos[1]}
+    # TODO: Returns disksize also.
+    return {"name":vm.name(), "state": infos[0], "memorysize": infos[1], 'cpu': infos[3]}
 
   def get_vmlist(self) :
     vms_uuid = []
