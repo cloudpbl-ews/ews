@@ -1,11 +1,12 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.template.context_processors import csrf
 
 from vmoperation import VMOperator
-from .forms import CreateVM
+from .forms import CreateVM, UpdateVM
 from .models import VirtualMachine, VirtualMachineRecord
 
 from django.conf import settings
@@ -40,3 +41,19 @@ def create_vm(request):
 @login_required
 def success(request):
     return render_to_response('vm/success.html')
+
+@login_required
+def edit(request, vm_id):
+  vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+  vm = VirtualMachine.from_record(vm_record)
+  if(request.method == 'POST'):
+    f = UpdateVM(request.POST)
+    if f.is_valid():
+      f.apply_update(vm)
+      vm.save()
+      return HttpResponseRedirect(reverse('vm:index'))
+    else:
+      return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+  else:
+    f = UpdateVM.from_model(vm)
+    return render(request, 'vm/edit.html', {'form': f, 'vm': vm})

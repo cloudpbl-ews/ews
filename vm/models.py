@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from .vmoperation import VMCreateOperation, VMSearchQuery
+from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation
 import uuid
 
 def model_alias(name):
@@ -72,8 +72,8 @@ class VirtualMachine(object):
       self.uuid = VMCreateOperation(self).submit().get_uuid()
       self.to_record().save()
     else:
-      # TODO: Update attributes
-      pass
+      VMUpdateOperation(self).submit()
+      self.to_record().save()
     return self
 
   def is_new(self):
