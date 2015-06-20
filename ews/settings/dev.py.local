@@ -17,3 +17,6 @@ SECRET_KEY = 'please-set-very-long-words'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 PRODUCTION = False
+
+# Rewrite this url to the hypervisor's url.
+HYPERVISOR_URL = '127.0.0.1'

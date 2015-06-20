@@ -8,6 +8,8 @@ from vmoperation import VMOperator
 from .forms import CreateVM
 from .models import VirtualMachine, VirtualMachineRecord
 
+from django.conf import settings
+
 import uuid
 import string
 import random
@@ -16,7 +18,7 @@ import random
 def index(request):
   vm_records = request.user.virtualmachinerecord_set.all()
   vms = [VirtualMachine.from_record(vm) for vm in vm_records]
-  return render(request, 'vm/index.html', {'vms': vms})
+  return render(request, 'vm/index.html', {'vms': vms, 'HYPERVISOR_URL': settings.HYPERVISOR_URL})
 
 @login_required
 def create_vm(request):

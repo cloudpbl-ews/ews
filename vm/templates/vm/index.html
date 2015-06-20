@@ -6,7 +6,7 @@
 {% if vms %}
 <ul>
 {% for vm in vms %}
-<li><a href="{% url 'noVNC:index'%}?host=157.82.3.111&port={{vm.vncport}}&password={{vm.password}}"  >{{ vm.name }}</a>: {{ vm.state }}</li>
+<li><a href="{% url 'noVNC:index'%}?host={{HYPERVISOR_URL}}&port={{vm.vncport}}&password={{vm.password}}"  >{{ vm.name }}</a>: {{ vm.state }}</li>
 {% endfor %}
 </ul>
 {% else %}
