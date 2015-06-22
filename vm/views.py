@@ -8,6 +8,8 @@ from vmoperation import VMOperator
 from .forms import CreateVM
 from .models import VirtualMachine, VirtualMachineRecord
 
+from django.conf import settings
+
 import uuid
 import string
 import random
@@ -19,7 +21,7 @@ def index(request):
   # This `cpus` indicates which cpu data should be rendered for each vm.
   # TODO: Fetch which cpu is used by each vm.
   cpus = [1]
-  return render(request, 'vm/index.html', {'vms': vms, 'cpus': cpus})
+  return render(request, 'vm/index.html', {'vms': vms, 'cpus': cpus, 'HYPERVISOR_URL': settings.HYPERVISOR_URL})
 
 @login_required
 def create_vm(request):

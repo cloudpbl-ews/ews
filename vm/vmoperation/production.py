@@ -12,9 +12,10 @@
 import os
 import libvirt
 from uuid import UUID
+from django.conf import settings
 
 class VMOperator():
-  hypervisor_url = "qemu+tls://157.82.3.111/system"
+  hypervisor_url = "qemu+tls://" + settings.HYPERVISOR_URL + "/system"
   def __init__(self):
     self.con = libvirt.open(self.hypervisor_url)
     if self.con is None:
