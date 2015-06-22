@@ -112,3 +112,8 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
       macaddr=macaddr,
       websocketport=websocketport, 
       passwd=passwd)
+
+
+# Generate xml of network interface card for virtual machine
+def GenNICXML():
+  
