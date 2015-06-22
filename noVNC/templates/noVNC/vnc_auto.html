@@ -29,6 +29,13 @@
 {% endblock %}
 
 {% block additional_body %}
+<script id="novnc-parameter" type="application/json">
+{
+  "host": "{{ novnc_url }}",
+  "port": "{{ vm.vncport }}",
+  "password": "{{ vm.password }}"
+}
+</script>
 <script>
   var INCLUDE_URI="{% static "noVNC/include/" %}";
 </script>
