@@ -1,4 +1,7 @@
 language: python
-python: "2.7"
-install: "pip install -r requirements.txt"
-script: "pylint *"
+python: '2.7'
+install: pip install -r requirements.txt
+script: pylint *
+notifications:
+  slack:
+    secure: qBrtbEbOdEH9FHWXhVPZJtW9G+o2kfwLPfLKRQjnE7FPnfRRRT1YzYuJ6bUaKbUOrAs063M45N2CU+aScWNqJ9dnCZBCC3xlbUjLQV5mCUyfR89QP4pCL/8d8fBci8rUCpv+QZI9UlKJorLnwm6KL7T0KocvHMb//gPSfewl8eGGbNoL5NDX+licxdbR91FVCCvLDGl/zUhh6yd1CABFbCHJZ48n5MrowXGxGM8MKjWdIyZLMQnb0+dRswv6J0KzYGqFS9uvIPpWoq2nJVKyD52nLtY/hN1Yq1H4GfTF8lluh90Jd5FR1K+SZqi3RkWYTZjhMEfCOnuAlePXCYsNtJDrJmWTQvzglccjwpRwxOb2uQSBlZl5RXcKIorqW9mWexWC1PVQqmnEe5drtstcZpVlFBFjJGZs4NYOA4h96urEGxhlB8e2cr923m+j0Tjo1gFYeOAHj3BLlb68Se6VAZ/AM8WoSBjNPggZChkNmwB0ypOMkU/nFGcXk6MS8C/4SmmWEHT31nibBAjbnR7brp7JKfkmcA9NwhqU8rqhsFfrzQLVLoh5BWGPHCBrUy3OHHXity1uEYYmAAviSdQR7aS2138HcfZmOfDTMLaUf7z35nFjKQcEIANBwIobMuH83L2dtNl8xwjicC8oR2yjAuD02FUK+kJQclSIz6nlQ/g=
