@@ -3,6 +3,13 @@ import os
 import re
 import random
 
+from xml.etree import ElementTree as ET
+
+### CONSTANTS ###
+NETWORK_PRIVATE = 0
+NETWORK_BRIDGE = 1
+
+
 def GenMac():
     mac = [ 0x00, 0x16, 0x3e,
             random.randint(0x00, 0x7f),
@@ -112,3 +119,24 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
         macaddr=macaddr,
         websocketport=websocketport,
         passwd=passwd)
+
+# Generate xml of network interface card for virtual machine
+# type: contant, source: the name of bridge or network, model: 'virtio' or 'e1000'
+def gen_nic_xml(type, source, model):
+    network_xml = ET.Element('interface')
+    source_xml = ET.SubElement(network_xml, 'source')
+    model_xml = ET.SubElement(network_xml, 'model')
+    if type == NETWORK_BRIDGE:
+        iface_type = 'bridge'
+        source_xml.set('bridge', source)
+    elif type == NETWORK_PRIVATE:
+        iface_type = 'network'
+        source_xml.set('network', source)
+    else:
+        raise Exception("Invalid Network Type!")
+    network_xml.set('type',iface_type)
+    model_xml.set('type', model)
+    ET.dump(network_xml)
+
+if __name__ == '__main__':
+    print gen_nic_xml(NETWORK_BRIDGE, 'br0', 'virtio')
