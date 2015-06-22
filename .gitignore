@@ -4,5 +4,5 @@ ews/settings/dev.py
 ews/settings/production.py
 docs/_build
 db.sqlite3
-static/statistics/data/cpu/*
-static/statistics/data/cpuusage/*
+static/statistics/data/cpu/*.rrd
+static/statistics/data/cpuusage/*.txt
