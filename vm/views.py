@@ -33,7 +33,7 @@ def create_vm(request):
       vncport = VirtualMachineRecord.find_vnc_port()
       passwd = random_str = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(10)])
       f.create_instance(request.user, vncport, passwd).save()
-      return HttpResponseRedirect('vm/success')
+      return HttpResponseRedirect('success')
   else:
     f = CreateVM()
     return render_to_response('vm/create_vm.html', {'form': f}, context_instance=RequestContext(request))
