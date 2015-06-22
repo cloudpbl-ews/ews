@@ -1,15 +1,239 @@
 {% extends "base.html" %}
 
+{% load static from staticfiles %}
+
 {% block title %}EWS - VM List{% endblock %}
 
+{% block additional_head %}
+{% endblock %}
 {% block content %}
+
+
+    <style type="text/css">
+  .highcharts-tooltip>span {
+  	background: white;
+  	border: 1px solid silver;
+  	border-radius: 3px;
+  	box-shadow: 1px 1px 2px #888;
+  	padding: 8px;
+  }
+  </style>
+
+{% endblock %}
+{% block additional_body %}
+<script src="{% static "statistics/js/highcharts.js" %}"></script>
+<script type="text/javascript">
+
+$(function () {
+    Highcharts.CpuUsage = function (options, callback) {
+        var defaultOptions = {
+            chart: {
+                renderTo: (options.chart && options.chart.renderTo) || this,
+                backgroundColor: null,
+                borderWidth: 0,
+                type: 'line',
+                //margin: [0, 0, 0, 0],
+                margin: [2, 0, 2, 0],
+                width: 200,
+                height: 60,
+                style: {
+                    overflow: 'visible'
+                },
+                //type: 'area',
+                //zoomType: "xy",
+            },
+            title: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                labels: {
+                    enabled: false
+                },
+                title: {
+                    text: null
+                },
+                startOnTick: false,
+                endOnTick: false,
+                tickPositions: []
+            },
+            yAxis: {
+                min: 0,
+                max: 1,
+                endOnTick: false,
+                startOnTick: false,
+                labels: {
+                    enabled: false
+                },
+                title: {
+                    text: null
+                },
+                tickPositions: [0]
+            },
+            legend: {
+                //must
+                enabled: false
+            },
+            tooltip: {
+                backgroundColor: null,
+                borderWidth: 0,
+                shadow: false,
+                useHTML: true,
+                hideDelay: 0,
+                shared: true,
+                padding: 0,
+                positioner: function (w, h, point) {
+                    return { x: point.plotX - w / 2, y: point.plotY - h};
+                }
+            },
+            plotOptions: {
+                series: {
+                    animation: false,
+                    pointInterval: 5*1000,
+                    pointStart: (new Date()).getTime()-300-540*60*1000,
+                    lineWidth: 1,
+                    fillOpacity: 0.25,
+                    shadow: false,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    marker: {
+                        radius: 1,
+                        states: {
+                            hover: {
+                                radius: 2
+                            }
+                        }
+                    },
+                },
+            }
+        };
+        options = Highcharts.merge(defaultOptions, options);
+        return new Highcharts.Chart(options, callback);
+    };
+
+    $tds = $("td[data-cpuusage]")
+
+    function epochToLocal(time){
+      var d = new Date(time);
+      return [
+        d.getFullYear(),
+        d.getMonth() + 1,
+        d.getDate()
+      ].join( '/' ) + ' '
+      + d.toLocaleTimeString();
+    }
+
+    var drawlist = new Object();
+    function Draw(){
+      for(i = 0; i < $tds.length;i++){
+            $td = $($tds[i]);
+            chart = {};
+            $td.highcharts('CpuUsage', {
+                series: drawlist[i],
+                tooltip: {
+                    formatter: function () {
+                      return '<span style="font-size: 10px">' + epochToLocal(this.x) +", "+this.y+ ":</span><br/>"
+                    }
+                },
+                chart: chart,
+                colors: ['#008ECF','#F0EA30','#70BE47', '#F82F66', '#F55A21' ]
+            });
+
+      }
+    }
+
+    function RequestAndSet(idx, urlname){
+            $td = $($tds[idx]);
+            jQuery.ajax({
+              url: "/static/statistics/data/cpuusage/"+urlname,
+              type: "GET",
+              dataType: "text",
+              success: function(data) {
+                  var plotdata = new Array();
+                  data = data.split(/\r\n|\r|\n/);
+                  for(j=0; j<data.length-2; j++){
+                     if(isNaN(data[j].split(":")[1])){
+                       plotdata[j] = 0;
+                     }else{
+                       plotdata[j] = Number(data[j].split(":")[1]);
+                     }
+                  }
+                  if(idx in drawlist){
+                    drawlist[idx].push({data: plotdata});
+                  }else{
+                    drawlist[idx] = [];
+                    drawlist[idx].push({data: plotdata});
+                  }
+              }
+            });
+    }
+
+    function parseCpuUsage(idx){
+            $td = $($tds[idx]);
+            stringdata = $td.data('cpuusage');
+            stringdata = stringdata.split(",");
+            for(cpu = 0; cpu < stringdata.length; cpu++){
+              RequestAndSet(idx, stringdata[cpu]);
+            }
+    }
+
+    function SendRequest() {
+        for (idx = 0; idx < $tds.length; idx += 1) {
+            parseCpuUsage(idx);
+        }
+    }
+
+var StartTimer, StopTimer, Timer, time, timerID;
+
+timerID = 0;
+
+StartTimer = function() {
+  Timer();
+  timerID = setInterval(Timer/*定期的に呼び出す関数名*/, 3000/*呼び出す間隔*/);
+};
+
+StopTimer = function() {
+  timerID= 0;
+  //clearOnterval(timerID);
+};
+
+Timer = function() {
+  Draw();
+  drawlist = new Object();
+  SendRequest();
+  return;
+};
+
+SendRequest();
+$(function () { StartTimer(); });
+});
+</script>
+
 {% if vms %}
 <ul>
-{% for vm in vms %}
-<li><a href="{% url 'noVNC:index'%}?host={{HYPERVISOR_URL}}&port={{vm.vncport}}&password={{vm.password}}"  >{{ vm.name }}</a>: {{ vm.state }}</li>
+<table border=H3>
+  <tr>
+    <td>VMname</td>
+    <td>Display</td>
+    <td>state</td>
+    <td width="100%">CPUusage</td>
+  </tr>
+  {% for vm in vms %}
+  <tr>
+    <td><center>{{vm.name}}</center></td>
+    <td><a href="{% url 'noVNC:index'%}?host={{HYPERVISOR_URL}}&port={{vm.vncport}}&password={{vm.password}}"  ><center><img src="{% static "vm/png/glyphicons-87-display.png" %}"/></center></a></td>
+    <td> {{ vm.state }}</td>
+    <td data-cpuusage="{% for cpu in cpus %}{% if forloop.last %}{{vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
+  </tr>
 {% endfor %}
+</table>
 </ul>
 {% else %}
-<p>No polls are available.</p>
+<p>You have no VMs</p>
 {% endif %}
 {% endblock %}
