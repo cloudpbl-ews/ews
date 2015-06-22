@@ -1,4 +1,4 @@
-# ews
+# ews [![Build Status](https://travis-ci.org/tomoasleep/ews.svg)](https://travis-ci.org/tomoasleep/ews)
 Enpit Web Service(仮)
 
 # 機能
