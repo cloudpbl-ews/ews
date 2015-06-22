@@ -16,6 +16,8 @@ import random
 def index(request):
   vm_records = request.user.virtualmachinerecord_set.all()
   vms = [VirtualMachine.from_record(vm) for vm in vm_records]
+  # This `cpus` indicates which cpu data should be rendered for each vm.
+  # TODO: Fetch which cpu is used by each vm.
   cpus = [1]
   return render(request, 'vm/index.html', {'vms': vms, 'cpus': cpus})
 

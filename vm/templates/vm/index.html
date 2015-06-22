@@ -119,7 +119,7 @@ $(function () {
     $tds = $("td[data-cpuusage]")
 
     function epochToLocal(time){
-      var d = new Date(time); 
+      var d = new Date(time);
       return [
         d.getFullYear(),
         d.getMonth() + 1,
@@ -149,7 +149,7 @@ $(function () {
 
     function RequestAndSet(idx, urlname){
             $td = $($tds[idx]);
-            jQuery.ajax({ 
+            jQuery.ajax({
               url: "/static/statistics/data/cpuusage/"+urlname,
               type: "GET",
               dataType: "text",
@@ -181,7 +181,7 @@ $(function () {
               RequestAndSet(idx, stringdata[cpu]);
             }
     }
-    
+
     function SendRequest() {
         for (idx = 0; idx < $tds.length; idx += 1) {
             parseCpuUsage(idx);
@@ -190,11 +190,11 @@ $(function () {
 
 var StartTimer, StopTimer, Timer, time, timerID;
 
-time = 2;
 timerID = 0;
 
 StartTimer = function() {
-  timerID = setInterval(Timer/*定期的に呼び出す関数名*/, 1000/*呼び出す間隔*/);
+  Timer();
+  timerID = setInterval(Timer/*定期的に呼び出す関数名*/, 3000/*呼び出す間隔*/);
 };
 
 StopTimer = function() {
@@ -203,19 +203,14 @@ StopTimer = function() {
 };
 
 Timer = function() {
-  time = time + 1;
-  console.log(time);
-  if (time > 2) {
-    Draw();
-    time = 0;
-    drawlist = new Object();
-    SendRequest();
-    return;
-  }
+  Draw();
+  drawlist = new Object();
+  SendRequest();
+  return;
 };
 
 SendRequest();
-StartTimer();
+$(function () { StartTimer(); });
 });
 </script>
 
