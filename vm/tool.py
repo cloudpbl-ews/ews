@@ -4,16 +4,16 @@ import re
 import random
 
 def GenMac():
-   mac = [ 0x00, 0x16, 0x3e,
-           random.randint(0x00, 0x7f),
-           random.randint(0x00, 0xff),
-           random.randint(0x00, 0xff) ]
-   return ':'.join(map(lambda x: "%02x" % x, mac))
+    mac = [ 0x00, 0x16, 0x3e,
+            random.randint(0x00, 0x7f),
+            random.randint(0x00, 0xff),
+            random.randint(0x00, 0xff) ]
+    return ':'.join(map(lambda x: "%02x" % x, mac))
 
 
 
 def StorageXMLGen(hostname, disksize):
-  return """
+    return """
 <volume type='file'>
   <name>{hostname:s}.img</name>
   <key> /var/lib/libvirt/images/{hostname:s}.img</key>
@@ -31,12 +31,12 @@ def StorageXMLGen(hostname, disksize):
     </permissions>
   </target>
 </volume>""".format(hostname=hostname,
-      disksize=disksize)
+        disksize=disksize)
 
 
 def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport, passwd):
       #<source file='/root/vmimage/{hostname:s}.img'/>
-  return """
+    return """
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>{hostname:s}</name>
   <uuid>{uuid:s}</uuid>
@@ -105,10 +105,10 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
     </memballoon>
   </devices>
 </domain>""".format(hostname=hostname,
-      uuid=uuid,
-      memorysize=memorysize,
-      cpu=cpu,
-      image_file=image_file,
-      macaddr=macaddr,
-      websocketport=websocketport, 
-      passwd=passwd)
+        uuid=uuid,
+        memorysize=memorysize,
+        cpu=cpu,
+        image_file=image_file,
+        macaddr=macaddr,
+        websocketport=websocketport,
+        passwd=passwd)
