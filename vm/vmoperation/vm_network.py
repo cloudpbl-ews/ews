@@ -48,7 +48,7 @@ class VirtualNetwork():
             raise Exception("Not Stopping")
 
     def is_auto(self):
-        if self.virt_nw.autostart() == 1: # 
+        if self.virt_nw.autostart() == 1: #
             return True
         else:
             return False
@@ -76,5 +76,3 @@ if __name__ == '__main__':
     for nw in host_nw.get_list_networks():
         print nw.br_name(), nw.name()
         nw.set_auto(1)
-
-
