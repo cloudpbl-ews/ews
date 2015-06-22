@@ -61,9 +61,12 @@ class VMUpdateOperation(VMOperationBase):
   def __init__(self, vm):
     self.vm = vm
 
-  def submit():
-    # TODO
-    pass
+  def submit(self):
+    # TODO: Implement update operations
+    # Print vm fields temporary
+    print self.vm.cpu
+    print self.vm.memorysize
+    print self.vm.disksize
 
 class VMSearchQuery(VMOperationBase):
   def __init__(self, uuid):

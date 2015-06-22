@@ -216,12 +216,14 @@ $(function () { StartTimer(); });
 
 {% if vms %}
 <ul>
+<<<<<<< HEAD
 <table border=H3>
   <tr>
     <td>VMname</td>
     <td>Display</td>
     <td>state</td>
     <td width="100%">CPUusage</td>
+    <td>Controls</td>
   </tr>
   {% for vm in vms %}
   <tr>
@@ -229,6 +231,7 @@ $(function () { StartTimer(); });
     <td><a href="{% url 'noVNC:index'%}?host={{HYPERVISOR_URL}}&port={{vm.vncport}}&password={{vm.password}}"  ><center><img src="{% static "vm/png/glyphicons-87-display.png" %}"/></center></a></td>
     <td> {{ vm.state }}</td>
     <td data-cpuusage="{% for cpu in cpus %}{% if forloop.last %}{{vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
+    <td><a href="{% url 'vm:edit' vm_id=vm.id %}">Edit</a></td>
   </tr>
 {% endfor %}
 </table>
