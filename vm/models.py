@@ -81,6 +81,7 @@ class VirtualMachine(object):
 
     def delete(self):
         VMDeleteOperation(self).submit()
+        self.instance.delete()
 
     def get_disksize_byte(self):
         # a unit of disksize is giga byte.

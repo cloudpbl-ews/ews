@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
@@ -44,11 +44,13 @@ def success(request):
 
 @login_required
 def delete_vm(request, vm_id):
-    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
-    vm = VirtualMachine.from_record(vm_record)
-    vm.delete()
-    vm_record.delete()
-    return render_to_response('vm/delete_success.html')
+    if(request.method == 'POST'):
+      vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+      vm = VirtualMachine.from_record(vm_record)
+      vm.delete()
+      return render_to_response('vm/delete_success.html')
+    else :
+      return HttpResponseForbidden()
 
 @login_required
 def edit(request, vm_id):
