@@ -45,12 +45,12 @@ def success(request):
 @login_required
 def delete_vm(request, vm_id):
     if(request.method == 'POST'):
-      vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
-      vm = VirtualMachine.from_record(vm_record)
-      vm.delete()
-      return render_to_response('vm/delete_success.html')
+        vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+        vm = VirtualMachine.from_record(vm_record)
+        vm.delete()
+        return render_to_response('vm/delete_success.html')
     else :
-      return HttpResponseForbidden()
+        return HttpResponseForbidden()
 
 @login_required
 def edit(request, vm_id):
