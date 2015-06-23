@@ -57,7 +57,7 @@ class VMOperator():
         self.con.lookupByName(hostname).create()
 
     def undefine_vm(self, uuid) :
-        os.system("virsh -c {:s} undefine {:s}".format(self.hypervisor_url, str(uuid)))
+        os.system("virsh -c {:s} undefine {:s} --remove-all-storage".format(self.hypervisor_url, str(uuid)))
 
     def get_vminfo(self, uuid) :
         print "uuid", uuid
