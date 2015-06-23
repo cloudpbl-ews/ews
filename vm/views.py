@@ -40,7 +40,15 @@ def create_vm(request):
 
 @login_required
 def success(request):
-    return render_to_response('vm/success.html')
+    return render_to_response('vm/create_success.html')
+
+@login_required
+def delete_vm(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    vm.delete()
+    vm_record.delete()
+    return render_to_response('vm/delete_success.html')
 
 @login_required
 def edit(request, vm_id):

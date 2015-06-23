@@ -76,3 +76,10 @@ class VMSearchQuery(VMOperationBase):
         print type(self.uuid)
         attrs = self.__class__.get_operator().get_vminfo(self.uuid)
         return attrs
+
+class VMDeleteOperation(VMOperationBase):
+    def __init__(self, vm):
+        self.vm = vm
+
+    def submit(self):
+        self.__class__.get_operator().undefine_vm(self.vm.uuid)
