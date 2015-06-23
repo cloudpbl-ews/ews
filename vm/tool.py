@@ -3,6 +3,12 @@ import os
 import re
 import random
 
+
+### CONSTANTS ###
+NETWORK_PRIVATE = 0
+NETWORK_BRIDGE = 1
+
+
 def GenMac():
    mac = [ 0x00, 0x16, 0x3e,
            random.randint(0x00, 0x7f),
@@ -115,5 +121,35 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
 
 
 # Generate xml of network interface card for virtual machine
-def GenNICXML():
+def gen_nic_xml(type, **kwargs):
+    if type == NETWORK_BRIDGE:
+        iface_type = "bridge"
+        net_option = _gen_nic_xml_bridge()
+    elif type == NETWORK_PRIVATE:
+        iface_type = "network"
+        net_option = _gen_nic_xml_private()
+    else:
+        raise Exception("Invalid Network Type!")
+
+    return """
+        <interface type='{iface_type:s}''>
+            {net_option:s}
+        </interface>""".format(
+            iface_type=iface_type,
+            net_option=net_option)
+
+# Generate internal xml for bridge network
+def _gen_nic_xml_bridge(**kwargs):
+    return """
+    """
+
+# Generate internal xml for virtual private network
+def _gen_nic_xml_private(**kwargs):
+    return """
+        <source network='{net_name:s}'/>
+    """.format(
+        net_name=net_name)
+
+
+
   
