@@ -19,13 +19,13 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'django.contrib.auth.views.login',
-        {'template_name': 'accounts/login.html'}),
+        {'template_name': 'accounts/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
-        {'template_name': 'accounts/logged_out.html'}),
-    url(r'^login/vm/', include('vm.urls', namespace="vm")),
+        {'template_name': 'accounts/logged_out.html'}, name='logout'),
+    url(r'^vm/', include('vm.urls', namespace="vm")),
     #url(r'^login/vm/new', include('vm.urls', namespace="vm")),
     url(r'^noVNC/', include('noVNC.urls', namespace="noVNC")),
 ]
