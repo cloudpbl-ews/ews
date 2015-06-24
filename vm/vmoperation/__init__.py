@@ -65,9 +65,12 @@ class VMUpdateOperation(VMOperationBase):
         # TODO: Implement update operations(disksize)
         print "hdd "+str(self.vm.disksize)
 
+        self.__class__.get_operator().destroy(self.vm.uuid)
+        self.__class__.get_operator().set_cpu(self.vm.uuid, self.vm.cpu)
         self.__class__.get_operator().set_cpu(self.vm.uuid, self.vm.cpu)
         self.__class__.get_operator().set_memory(self.vm.uuid,
-            self.vm.memorysize*1024*1024)
+            self.vm.memorysize*1024*1024*1024)
+        self.__class__.get_operator().start(self.vm.uuid)
 
 class VMSearchQuery(VMOperationBase):
     def __init__(self, uuid):

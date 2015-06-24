@@ -19,6 +19,10 @@ class VMOperator():
         print 'vm_: '
         print hostname
 
+    def destroy(self, uuid):
+        print 'destroy: '
+        print uuid
+
     def set_cpu(self, uuid, cpu_num) :
         print 'set_cpu: '
         print uuid

@@ -58,8 +58,8 @@ class VMOperator():
     def start_by_hostname(self, hostname) :
         self.con.lookupByName(hostname).create()
 
-    def destroy_vm(self) :
-        raise
+    def destroy(self, uuid) :
+        os.system("virsh -c {:s} destroy {:s}".format(self.hypervisor_url, str(uuid)))
 
     def get_vminfo(self, uuid) :
         print "uuid", uuid
@@ -108,11 +108,21 @@ class VMOperator():
 
     def set_cpu(self, uuid, cpu_num) :
         vm = self.con.lookupByUUID(uuid.bytes)
-        vm.setVcpus(cpu_num)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        vcpu_element = xml.find('./vcpu')
+        vcpu_element.text = str(cpu_num)
+        self.con.defineXML(ET.tostring(xml))
 
     def set_memory(self, uuid, memory_size) :
         vm = self.con.lookupByUUID(uuid.bytes)
-        vm.setMemory(memory_size/1024) # KiB
+        xml = ET.fromstring(vm.XMLDesc(0))
+        memory_element = xml.find('./memory')
+        memory_element.attrib['unit']= 'Kib'
+        memory_element.text = str(memory_size/1024)
+        currentmemory_element = xml.find('./currentMemory')
+        currentmemory_element.attrib['unit']= 'Kib'
+        currentmemory_element.text = str(memory_size/1024)
+        self.con.defineXML(ET.tostring(xml))
 
     def get_cpu(self, uuid) :
         vm = self.con.lookupByUUID(uuid.bytes)
@@ -137,6 +147,7 @@ class VMOperator():
         graphic_element = xml.find('.//graphics')
         graphic_element.attrib['websocket'] = str(port)
         dom.updateDeviceFlags(ET.tostring(graphic_element), 0)
+        self.con.defineXML(ET.tostring(xml))
 
 if __name__ == '__main__':
     op = VMOperator()
