@@ -125,11 +125,11 @@ class VMOperator():
         xml = ET.fromstring(vm.XMLDesc(0))
         graphic_element = xml.find('./memory')
         if graphic_element.attrib['unit'] == "KiB" :
-          return int(graphic_element.text)*1024
+            return int(graphic_element.text)*1024
         elif graphic_element.attrib['unit'] == "MiB" :
-          return int(graphic_element.text)*1024*1024
+            return int(graphic_element.text)*1024*1024
         elif graphic_element.attrib['unit'] == "GiB" :
-          return int(graphic_element.text)*1024*1024*1024
+            return int(graphic_element.text)*1024*1024*1024
 
     def set_vnc_port(self, uuid, port) :
         vm = self.con.lookupByUUID(uuid.bytes)
