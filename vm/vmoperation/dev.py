@@ -18,3 +18,13 @@ class VMOperator():
     def start_by_hostname(self, hostname):
         print 'vm_: '
         print hostname
+
+    def set_cpu(self, uuid, cpu_num) :
+        print 'set_cpu: '
+        print uuid
+        print cpu_num
+
+    def set_memory(self, uuid, memory_size_mb) :
+        print 'set_memory: '
+        print uuid
+        print memory_size_mb

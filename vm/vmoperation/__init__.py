@@ -62,11 +62,12 @@ class VMUpdateOperation(VMOperationBase):
         self.vm = vm
 
     def submit(self):
-        # TODO: Implement update operations
-        # Print vm fields temporary
-        print self.vm.cpu
-        print self.vm.memorysize
-        print self.vm.disksize
+        # TODO: Implement update operations(disksize)
+        print "hdd "+str(self.vm.disksize)
+
+        self.__class__.get_operator().set_cpu(self.vm.uuid, self.vm.cpu)
+        self.__class__.get_operator().set_memory(self.vm.uuid,
+            self.vm.memorysize*1024*1024)
 
 class VMSearchQuery(VMOperationBase):
     def __init__(self, uuid):

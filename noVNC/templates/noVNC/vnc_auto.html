@@ -54,6 +54,7 @@
 
 <script>
 "use strict";
+var rfb;
 function FBUComplete(rfb, fbu) {
     rfb.set_onFBUComplete(function() { });
 }
@@ -148,7 +149,6 @@ function parse_getperameter()
 }
 
 $(function(){
-var rfb;
 var path, token;
 var params;
 var host;
