@@ -75,8 +75,6 @@ def edit(request, vm_id):
         f = UpdateVM.from_model(vm)
         return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
 
-
-
 OSlist = ["CentOS", "debian", "FreeBSD", "ubuntu", "arch", "Gentoo", "rasbian", "archbsd", "openbsd", "netbsd", "android"]
 
 def isCollect(osname, vms):
@@ -99,3 +97,23 @@ def info(request, vm_id):
     vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
     vm = VirtualMachine.from_record(vm_record)
     return render(request, 'vm/info.html', {'vm': vm})
+
+@login_required
+def power_on_vm(request, vm_id):
+ if(request.method == 'POST'):
+        vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+        vm = VirtualMachine.from_record(vm_record)
+        vm.power_on()
+        return render_to_response('vm/********.html')
+    else :
+        return HttpResponseForbidden()
+
+@login_required
+def shutdown_vm(request, vm_id):
+ if(request.method == 'POST'):
+        vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+        vm = VirtualMachine.from_record(vm_record)
+        vm.shutdown()
+        return render_to_response('vm/********.html')
+    else :
+        return HttpResponseForbidden()
