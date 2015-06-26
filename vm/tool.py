@@ -42,7 +42,7 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
   <uuid>{uuid:s}</uuid>
   <memory unit='KiB'>{memorysize:d}</memory>
   <currentMemory unit='KiB'>{memorysize:d}</currentMemory>
-  <vcpu placement='static'>{cpu:s}</vcpu>
+  <vcpu placement='static'>{cpu:d}</vcpu>
   <os>
     <type arch='x86_64' machine='pc-i440fx-1.7'>hvm</type>
     <boot dev='hd'/>

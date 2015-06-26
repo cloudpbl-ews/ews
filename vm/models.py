@@ -45,7 +45,7 @@ class VirtualMachine(object):
 
     # Define attributes' types
     state = attribute(unicode)
-    cpu = attribute(unicode)
+    cpu = attribute(int)
     os = attribute(unicode)
     memorysize = attribute(int)
     disksize = attribute(int)
