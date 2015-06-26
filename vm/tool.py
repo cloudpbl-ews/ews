@@ -3,6 +3,7 @@ import os
 import re
 import random
 
+from xml.etree import ElementTree as ET
 
 ### CONSTANTS ###
 NETWORK_PRIVATE = 0
@@ -121,35 +122,22 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
 
 
 # Generate xml of network interface card for virtual machine
-def gen_nic_xml(type, **kwargs):
+# type: contant, source: the name of bridge or network, model: 'virtio' or 'e1000'
+def gen_nic_xml(type, source, model):
+    network_xml = ET.Element('interface')
+    source_xml = ET.SubElement(network_xml, 'source')
+    model_xml = ET.SubElement(network_xml, 'model')
     if type == NETWORK_BRIDGE:
-        iface_type = "bridge"
-        net_option = _gen_nic_xml_bridge()
+        iface_type = 'bridge'
+        source_xml.set('bridge', source)
     elif type == NETWORK_PRIVATE:
-        iface_type = "network"
-        net_option = _gen_nic_xml_private()
+        iface_type = 'network'
+        source_xml.set('network', source)
     else:
         raise Exception("Invalid Network Type!")
+    network_xml.set('type',iface_type)
+    model_xml.set('type', model)
+    ET.dump(network_xml)
 
-    return """
-        <interface type='{iface_type:s}''>
-            {net_option:s}
-        </interface>""".format(
-            iface_type=iface_type,
-            net_option=net_option)
-
-# Generate internal xml for bridge network
-def _gen_nic_xml_bridge(**kwargs):
-    return """
-    """
-
-# Generate internal xml for virtual private network
-def _gen_nic_xml_private(**kwargs):
-    return """
-        <source network='{net_name:s}'/>
-    """.format(
-        net_name=net_name)
-
-
-
-  
+if __name__ == '__main__':
+    print gen_nic_xml(NETWORK_BRIDGE, 'br0', 'virtio')
