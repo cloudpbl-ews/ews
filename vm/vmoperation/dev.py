@@ -15,6 +15,10 @@ class VMOperator():
         print 'define_vm: '
         print xml
 
+    def undefine_vm(self, uuid) :
+        print 'undefine_vm: '
+        print uuid
+
     def start_by_hostname(self, hostname):
         print 'vm_: '
         print hostname

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation
+from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation
 import uuid
 
 def model_alias(name):
@@ -78,6 +78,10 @@ class VirtualMachine(object):
 
     def is_new(self):
         return self.uuid is None
+
+    def delete(self):
+        VMDeleteOperation(self).submit()
+        self.instance.delete()
 
     def get_disksize_byte(self):
         # a unit of disksize is giga byte.

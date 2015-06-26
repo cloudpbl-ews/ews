@@ -48,7 +48,6 @@ class VMOperator():
         print 'CPU Time (in ns) = %d' % infos[2]
         print ''
 
-
     def create_storage(self, xml) :
         self.con.storagePoolLookupByName("default").createXML(xml)
 
@@ -60,6 +59,9 @@ class VMOperator():
 
     def destroy(self, uuid) :
         os.system("virsh -c {:s} destroy {:s}".format(self.hypervisor_url, str(uuid)))
+
+    def undefine_vm(self, uuid) :
+        os.system("virsh -c {:s} undefine {:s} --remove-all-storage".format(self.hypervisor_url, str(uuid)))
 
     def get_vminfo(self, uuid) :
         print "uuid", uuid
