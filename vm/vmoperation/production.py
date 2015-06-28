@@ -132,9 +132,9 @@ class VMOperator():
         os_element = xml.find('./os')
 
         for boot_element in xml.findall('.//boot') :
-          if boot_element.attrib['dev'] != bootdev :
-            os_element.remove(boot_element)
-            os_element.append(boot_element)
+            if boot_element.attrib['dev'] != bootdev :
+                os_element.remove(boot_element)
+                os_element.append(boot_element)
 
         self.con.defineXML(ET.tostring(xml))
 
