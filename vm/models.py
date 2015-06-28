@@ -98,7 +98,7 @@ class VirtualMachineRecord(models.Model):
     @classmethod
     def find_vnc_port(cls):
         vm_records = VirtualMachineRecord.objects.all()
-        vncport = 5720
+        vncport = 5750
         for record in vm_records:
             vncport = max(int(record.vncport), vncport)
         vncport += 1
