@@ -9,6 +9,7 @@ statpath = "../static/statistics/data/"
 cpurrdpath = statpath + "cpu/"
 cpuusagepath = statpath + "cpuusage/"
 cpupngpath= statpath + "cpupng/"
+colors =["ff0000", "00ff00", "0000ff", "ffff00", "00ffff", "ff00ff"]
 
 def rrd2plain():
     print "write to cpuuusage"
@@ -22,35 +23,39 @@ def rrd2plain():
 def rrd2png():
     print "write to cpupng"
     files = os.listdir(cpurrdpath)
+    num_cpu = {}
     for file in files:
-        print "file=" , file
         if(file == ".gitkeep"):
               continue
+        if file.split(".")[0] in num_cpu:
+            num_cpu[file.split(".")[0]] += 1
+        else:
+            num_cpu[file.split(".")[0]] = 1
+    print num_cpu
+    for uuid, cpunum in num_cpu.iteritems():
+        files = []
         endtime = time.time() - 10
-        #starttime = endtime - 2592000 + 20
         starttime = endtime - 3600
-        print "rrdtool.grapdh"
-        file1 = "5c7cddf2-1ca6-4f48-a02e-37f0b9ebdb13.1.rrd"
-        file2 = "5c7cddf2-1ca6-4f48-a02e-37f0b9ebdb13.2.rrd"
-        rrdtool.graph(cpupngpath + file,
+        for cpu in range(1, cpunum+1):
+          files.append(cpurrdpath + uuid+"."+str(cpu)+".rrd")
+        arg = []
+        for i in range(len(files)):
+          arg.append("DEF:s%d=%s:cpu:AVERAGE" % (i + 1, files[i]))
+          arg.append("CDEF:s%d_per=s%d,100,*" % (i+1, i+1))
+          arg.append("LINE:s%d_per#%s:cpu%d" % (i+1, colors[i%6],  i+1))
+
+        rrdtool.graph(cpupngpath + uuid+".png",
                   "--imgformat=PNG",
                   "--start=%d" % starttime,
                   "--end=%d" % endtime,
                   "--height=380",
                   "--width=480",
-                  "--x-grid=HOUR:1:HOUR:3:HOUR:3:0:%H:%M",
                   "--title=cpu #%d" % (int(file.split(".")[-2])),
                   "--vertical-label=cpu utilization (%)",
                   "--upper-limit=100",
                   "--lower-limit=0",
                   "--rigid",
-                  #"DEF:s1=%s:cpu1:AVERAGE" % (cpurrdpath + file),
-                  "DEF:s1=%s:cpu:AVERAGE" % (cpurrdpath + file1),
-                  "DEF:s2=%s:cpu:AVERAGE" % (cpurrdpath + file2),
-                  "CDEF:s1_per=s1,100,*",
-                  "CDEF:s2_per=s2,100,*",
-                  "LINE:s1_per#0000ff:cpu1",
-                  "LINE:s2_per#ff0000:cpu2",
+                  arg
                   );
 
 def updateCpuRRD(uuid, idx, tm, util):
