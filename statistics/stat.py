@@ -16,7 +16,7 @@ def rrd2plain():
     files = os.listdir(cpurrdpath)
     for file in files:
         if(file == ".gitkeep"):
-              continue
+            continue
         os.system('rrdtool fetch '+ cpurrdpath + file + ' AVERAGE --start `date +%s`-600 |  sed -e \'1,3d\'  > ' +cpuusagepath + file.split('.')[0]+ "."+ file.split('.')[1]  +".txt" )
 
 
@@ -26,7 +26,7 @@ def rrd2png():
     num_cpu = {}
     for file in files:
         if(file == ".gitkeep"):
-              continue
+            continue
         if file.split(".")[0] in num_cpu:
             num_cpu[file.split(".")[0]] += 1
         else:
@@ -37,12 +37,12 @@ def rrd2png():
         endtime = time.time() - 10
         starttime = endtime - 3600
         for cpu in range(1, cpunum+1):
-          files.append(cpurrdpath + uuid+"."+str(cpu)+".rrd")
+            files.append(cpurrdpath + uuid+"."+str(cpu)+".rrd")
         arg = []
         for i in range(len(files)):
-          arg.append("DEF:s%d=%s:cpu:AVERAGE" % (i + 1, files[i]))
-          arg.append("CDEF:s%d_per=s%d,100,*" % (i+1, i+1))
-          arg.append("LINE:s%d_per#%s:cpu%d" % (i+1, colors[i%6],  i+1))
+            arg.append("DEF:s%d=%s:cpu:AVERAGE" % (i + 1, files[i]))
+            arg.append("CDEF:s%d_per=s%d,100,*" % (i+1, i+1))
+            arg.append("LINE:s%d_per#%s:cpu%d" % (i+1, colors[i%6],  i+1))
 
         rrdtool.graph(cpupngpath + uuid+".png",
                   "--imgformat=PNG",
@@ -150,11 +150,11 @@ if __name__ == "__main__":
             stat.CollectStat()
             if i == 0 or i % 6 ==0:
                 rrd2plain()
-            if i == 0 or i % 3600 == 0:
+            if i == 20 or i % 3600 == 0:
                 rrd2png()
             time.sleep(1)
             if i >= 3600:
-              i = 0
+                i = 0
             i+=1
         except KeyboardInterrupt:
             break
