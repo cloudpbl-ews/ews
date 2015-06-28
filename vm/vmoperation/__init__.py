@@ -85,4 +85,5 @@ class VMDeleteOperation(VMOperationBase):
         self.vm = vm
 
     def submit(self):
+        self.__class__.get_operator().destroy(self.vm.uuid)
         self.__class__.get_operator().undefine_vm(self.vm.uuid)
