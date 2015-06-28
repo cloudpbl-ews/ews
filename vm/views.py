@@ -57,3 +57,10 @@ def edit(request, vm_id):
     else:
         f = UpdateVM.from_model(vm)
         return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+
+
+@login_required
+def info(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    return render(request, 'vm/info.html', {'vm': vm})
