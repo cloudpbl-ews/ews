@@ -15,6 +15,24 @@ class VMOperator():
         print 'define_vm: '
         print xml
 
+    def undefine_vm(self, uuid) :
+        print 'undefine_vm: '
+        print uuid
+
     def start_by_hostname(self, hostname):
         print 'vm_: '
         print hostname
+
+    def destroy(self, uuid):
+        print 'destroy: '
+        print uuid
+
+    def set_cpu(self, uuid, cpu_num) :
+        print 'set_cpu: '
+        print uuid
+        print cpu_num
+
+    def set_memory(self, uuid, memory_size_mb) :
+        print 'set_memory: '
+        print uuid
+        print memory_size_mb

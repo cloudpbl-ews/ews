@@ -13,6 +13,7 @@ import os
 import libvirt
 from uuid import UUID
 from django.conf import settings
+from xml.etree import ElementTree as ET
 
 class VMOperator():
     hypervisor_url = "qemu+tls://" + settings.HYPERVISOR_URL + "/system"
@@ -47,7 +48,6 @@ class VMOperator():
         print 'CPU Time (in ns) = %d' % infos[2]
         print ''
 
-
     def create_storage(self, xml) :
         self.con.storagePoolLookupByName("default").createXML(xml)
 
@@ -57,8 +57,11 @@ class VMOperator():
     def start_by_hostname(self, hostname) :
         self.con.lookupByName(hostname).create()
 
-    def destroy_vm(self) :
-        raise
+    def destroy(self, uuid) :
+        os.system("virsh -c {:s} destroy {:s}".format(self.hypervisor_url, str(uuid)))
+
+    def undefine_vm(self, uuid) :
+        os.system("virsh -c {:s} undefine {:s} --remove-all-storage".format(self.hypervisor_url, str(uuid)))
 
     def get_vminfo(self, uuid) :
         print "uuid", uuid
@@ -104,6 +107,49 @@ class VMOperator():
             uuid = UUID(bytes=self.con.lookupByName(vmname).UUID())
             vms.append(self.con.lookupByUUID(uuid.bytes))
         return vms
+
+    def set_cpu(self, uuid, cpu_num) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        vcpu_element = xml.find('./vcpu')
+        vcpu_element.text = str(cpu_num)
+        self.con.defineXML(ET.tostring(xml))
+
+    def set_memory(self, uuid, memory_size) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        memory_element = xml.find('./memory')
+        memory_element.attrib['unit']= 'Kib'
+        memory_element.text = str(memory_size/1024)
+        currentmemory_element = xml.find('./currentMemory')
+        currentmemory_element.attrib['unit']= 'Kib'
+        currentmemory_element.text = str(memory_size/1024)
+        self.con.defineXML(ET.tostring(xml))
+
+    def get_cpu(self, uuid) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        graphic_element = xml.find('./vcpu')
+        return int(graphic_element.text)
+
+    def get_memory(self, uuid) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        graphic_element = xml.find('./memory')
+        if graphic_element.attrib['unit'] == "KiB" :
+            return int(graphic_element.text)*1024
+        elif graphic_element.attrib['unit'] == "MiB" :
+            return int(graphic_element.text)*1024*1024
+        elif graphic_element.attrib['unit'] == "GiB" :
+            return int(graphic_element.text)*1024*1024*1024
+
+    def set_vnc_port(self, uuid, port) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        graphic_element = xml.find('.//graphics')
+        graphic_element.attrib['websocket'] = str(port)
+        dom.updateDeviceFlags(ET.tostring(graphic_element), 0)
+        self.con.defineXML(ET.tostring(xml))
 
 if __name__ == '__main__':
     op = VMOperator()

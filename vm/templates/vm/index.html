@@ -213,7 +213,6 @@ $(function () { StartTimer(); });
 </script>
 
 {% if vms %}
-<ul>
 <table class="table table-striped table-bordered">
   <tr>
     <td>VMname</td>
@@ -221,18 +220,24 @@ $(function () { StartTimer(); });
     <td>state</td>
     <td width="100%">CPUusage</td>
     <td>Controls</td>
+    <td>Delete</td>
   </tr>
   {% for vm in vms %}
   <tr>
     <td><center><a href="{% url 'vm:info' vm_id=vm.id %}">{{vm.name}}</a></center></td>
-    <td><a href="{% url 'noVNC:index' vm_id=vm.id %}?host={{HYPERVISOR_URL}}&port={{vm.vncport}}&password={{vm.password}}"  ><center><img src="{% static "vm/png/glyphicons-87-display.png" %}" class="img-responsive" alt="Responsive image"/></center></a></td>
+    <td><a href="{% url 'noVNC:index' vm_id=vm.id %}"  ><center><img src="{% static "vm/png/glyphicons-87-display.png" %}" class="img-responsive" alt="Responsive image"/></center></a></td>
     <td> {{ vm.state }}</td>
     <td data-cpuusage="{% for cpu in cpus %}{% if forloop.last %}{{vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
     <td><a href="{% url 'vm:edit' vm_id=vm.id %}">Edit</a></td>
+    <td>
+    <form method="post" action="{% url 'vm:delete' vm_id=vm.id %}">
+      {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    </td>
   </tr>
 {% endfor %}
 </table>
-</ul>
 {% else %}
 <p>You have no VMs</p>
 {% endif %}

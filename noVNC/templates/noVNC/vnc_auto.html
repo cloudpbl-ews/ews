@@ -55,8 +55,6 @@
 <script>
 "use strict";
 var rfb;
-var resizeTimeout;
-
 function FBUComplete(rfb, fbu) {
     rfb.set_onFBUComplete(function() { });
 }
@@ -157,7 +155,7 @@ var host;
 var port;
 var password;
 
-params = parse_getperameter();
+params = $.parseJSON($('#novnc-parameter').html())
 host = params["host"];
 port = params["port"];
 password = params["password"];
