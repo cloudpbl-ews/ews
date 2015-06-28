@@ -80,7 +80,7 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
     </controller>
     <interface type='bridge'>
       <mac address='{macaddr:s}'/>
-      <source bridge='virbr0'/>
+      <source bridge='br0'/>
       <model type='e1000'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
