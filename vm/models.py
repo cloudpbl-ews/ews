@@ -49,6 +49,7 @@ class VirtualMachine(object):
     os = attribute(unicode)
     memorysize = attribute(int)
     disksize = attribute(int)
+    bootdev = attribute(str)
 
     def __init__(self, instance=None, attributes={}):
         if instance is None:

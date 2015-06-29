@@ -36,3 +36,8 @@ class VMOperator():
         print 'set_memory: '
         print uuid
         print memory_size_mb
+
+    def set_bootdev(self, uuid, bootdev) :
+        print 'set_bootdev: '
+        print uuid
+        print bootdev
