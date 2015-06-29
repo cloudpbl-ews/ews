@@ -8,13 +8,55 @@ hypervisor_url = "qemu+tls://157.82.3.111/system"
 statpath = "../static/statistics/data/"
 cpurrdpath = statpath + "cpu/"
 cpuusagepath = statpath + "cpuusage/"
+cpupngpath= statpath + "cpupng/"
+colors =["ff0000", "00ff00", "0000ff", "ffff00", "00ffff", "ff00ff"]
 
 def rrd2plain():
     print "write to cpuuusage"
     files = os.listdir(cpurrdpath)
     for file in files:
+        if(file == ".gitkeep"):
+            continue
         os.system('rrdtool fetch '+ cpurrdpath + file + ' AVERAGE --start `date +%s`-600 |  sed -e \'1,3d\'  > ' +cpuusagepath + file.split('.')[0]+ "."+ file.split('.')[1]  +".txt" )
 
+
+def rrd2png():
+    print "write to cpupng"
+    files = os.listdir(cpurrdpath)
+    num_cpu = {}
+    for file in files:
+        if(file == ".gitkeep"):
+            continue
+        if file.split(".")[0] in num_cpu:
+            num_cpu[file.split(".")[0]] += 1
+        else:
+            num_cpu[file.split(".")[0]] = 1
+    print num_cpu
+    for uuid, cpunum in num_cpu.iteritems():
+        files = []
+        endtime = time.time() - 10
+        starttime = endtime - 3600
+        for cpu in range(1, cpunum+1):
+            files.append(cpurrdpath + uuid+"."+str(cpu)+".rrd")
+        arg = []
+        for i in range(len(files)):
+            arg.append("DEF:s%d=%s:cpu:AVERAGE" % (i + 1, files[i]))
+            arg.append("CDEF:s%d_per=s%d,100,*" % (i+1, i+1))
+            arg.append("LINE:s%d_per#%s:cpu%d" % (i+1, colors[i%6],  i+1))
+
+        rrdtool.graph(cpupngpath + uuid+".png",
+                  "--imgformat=PNG",
+                  "--start=%d" % starttime,
+                  "--end=%d" % endtime,
+                  "--height=380",
+                  "--width=480",
+                  "--title=cpu #%d" % (int(file.split(".")[-2])),
+                  "--vertical-label=cpu utilization (%)",
+                  "--upper-limit=100",
+                  "--lower-limit=0",
+                  "--rigid",
+                  arg
+                  );
 
 def updateCpuRRD(uuid, idx, tm, util):
     fname = "%s/%s.%d.rrd" % (cpurrdpath, uuid, idx)
@@ -106,10 +148,13 @@ if __name__ == "__main__":
         try:
             stat.UpdateVMlist()
             stat.CollectStat()
-            if i > 5:
+            if i == 0 or i % 6 ==0:
                 rrd2plain()
-                i=0
+            if i == 20 or i % 3600 == 0:
+                rrd2png()
             time.sleep(1)
+            if i >= 3600:
+                i = 0
             i+=1
         except KeyboardInterrupt:
             break

@@ -6,3 +6,4 @@ docs/_build
 db.sqlite3
 static/statistics/data/cpu/*.rrd
 static/statistics/data/cpuusage/*.txt
+static/statistics/data/cpupng/*.png

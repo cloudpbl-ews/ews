@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block title %}EWS - VM info - {{ vm.name }}{% endblock %}
+{% block content %}
+<h3>Basic Status</h3>
+<table class="table table-striped table-bordered">
+  <tr>
+    <td>VMname</td>
+    <td>{{vm.name}}</td>
+  </tr>
+  <tr>
+    <td>CPU</td>
+    <td>{{vm.cpu}}</td>
+  </tr>
+  <tr>
+    <td>os</td>
+    <td>{{vm.os}}</td>
+  </tr>
+  <tr>
+    <td>memorysize</td>
+    <td>{{vm.memorysize}}</td>
+  </tr>
+</table>
+
+
+<!-- TODO show from vm --!>
+<h3>Disk</h3>
+      <div  class="container">
+        <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>disk</th>
+            <th>size</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>disk1</td>
+            <td>10GB</td>
+          </tr>
+            <td>2</td>
+            <td>disk2</td>
+            <td>20GB</td>
+          <tr>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+
+
+<!-- TODO show from vm --!>
+<h3>Network</h3>
+      <div  class="container">
+        <table class="table">
+        <thead>
+          <tr>
+            <th>bridge</th>
+            <th>mac</th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>br0</td>
+            <td>11:22:33:44:da:sd</td>
+            <td>bridge</td>
+          </tr>
+          <tr>
+            <td>br0</td>
+            <td>11:22:33:44:da:sd</td>
+            <td>NAT</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+<h3>Statistics</h3>
+<h5>CPU</h5>
+      <img src="{% static "statistics/data/cpupng/" %}{{vm.uuid}}.png" class="img-responsive">
+{% endblock %}
