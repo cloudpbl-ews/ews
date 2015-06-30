@@ -78,7 +78,8 @@ def isCollect(osname, vms):
         pass
         #if osname in vm.os:
         #    return True
-    return False
+    #return False
+    return True
 
 @login_required
 def OScollection(request):
@@ -87,6 +88,5 @@ def OScollection(request):
     collectlist = []
     for OS in OSlist:
         collectlist.append({"name":OS, "have":isCollect(OS, vms)})
-    print collectlist
     return render(request, 'vm/OScollection.html', {"oslist": collectlist})
 
