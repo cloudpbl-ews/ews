@@ -67,3 +67,25 @@ def edit(request, vm_id):
     else:
         f = UpdateVM.from_model(vm)
         return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+
+
+
+OSlist = ["CentOS", "debian", "FreeBSD", "ubuntu", "arch", "Gentoo", "rasbian", "archbsd", "openbsd", "netbsd", "android"]
+
+def isCollect(osname, vms):
+    for vm in vms:
+        pass
+        #if osname in vm.os:
+        #    return True
+    return False
+
+@login_required
+def OScollection(request):
+    vm_records = request.user.virtualmachinerecord_set.all()
+    vms = [VirtualMachine.from_record(vm) for vm in vm_records]
+    collectlist = []
+    for OS in OSlist:
+        collectlist.append({"name":OS, "have":isCollect(OS, vms)})
+    print collectlist
+    return render(request, 'vm/OScollection.html', {"oslist": collectlist})
+
