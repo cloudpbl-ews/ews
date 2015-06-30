@@ -90,3 +90,8 @@ def OScollection(request):
         collectlist.append({"name":OS, "have":isCollect(OS, vms)})
     return render(request, 'vm/OScollection.html', {"oslist": collectlist})
 
+@login_required
+def info(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    return render(request, 'vm/info.html', {'vm': vm})

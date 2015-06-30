@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^(?P<vm_id>[0-9]+)/delete$', views.delete_vm, name='delete'),
     url(r'^(?P<vm_id>[0-9]+)/edit$', views.edit, name='edit'),
     url(r'^OScollection$', views.OScollection, name='OScollection'),
+    url(r'^(?P<vm_id>[0-9]+)$', views.info, name='info'),
 ]

@@ -5,9 +5,7 @@ from .models import VirtualMachine
 memory_field = forms.ChoiceField(initial="1", choices = [(1,"1G"),(2,"2G"),(3,"3G"),(4,"4G"),(5,"5G"),(6,"6G"),(7,"7G"),(8,"8G")])
 cpu_field = forms.ChoiceField(initial="1", choices = [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)])
 disksize_field = forms.IntegerField(initial="50")
-
-
-
+bootdev_field = forms.ChoiceField(initial="cdrom", choices = [("cdrom","cdrom"),("hd","hd")])
 
 class CreateVM(forms.Form):
     memorychoice = [(1,"1G"),(2,"2G"),(3,"3G"),(4,"4G"),(5,"5G"),(6,"6G"),(7,"7G"),(8,"8G")]
@@ -59,10 +57,16 @@ class UpdateVM(forms.Form):
     memorysize = memory_field
     cpu = cpu_field
     disksize = disksize_field
+    bootdev = bootdev_field
 
     @classmethod
     def from_model(cls, vm):
-        return cls(initial={ 'memorysize': vm.memorysize, 'cpu': vm.cpu, 'disksize': vm.disksize })
+        return cls(initial={
+          'memorysize': vm.memorysize,
+          'cpu': vm.cpu,
+          'disksize': vm.disksize,
+          'bootdev': vm.bootdev,
+          })
 
     def apply_update(self, vm):
         return vm.update(self.cleaned_data)
