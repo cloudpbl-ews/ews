@@ -43,27 +43,29 @@ class VirtualMachine(object):
     vncport = model_alias('vncport')
     password = model_alias('password')
 
-    # Define attributes' types
-    state = attribute(unicode)
-    cpu = attribute(int)
-    os = attribute(unicode)
-    memorysize = attribute(int)
-    disksize = attribute(int)
-    bootdev = attribute(str)
-    cdrom = attribute(str)
-
     def __init__(self, instance=None, attributes={}):
+        # Define attributes' types
+        self.state = attribute(unicode)
+        self.cpu = attribute(int)
+        self.os = attribute(unicode)
+        self.memorysize = attribute(int)
+        self.disksize = attribute(int)
+        self.bootdev = attribute(str)
+        self.cdrom = attribute(str)
+
         if instance is None:
             self.instance = VirtualMachineRecord()
         else:
             self.instance = instance
-            VMFetchOperation(self).submit()
         self.update(attributes)
+
+        if not self.is_new() :
+            VMFetchOperation(self).submit()
 
     def update(self, attributes = {}):
         for k, v in attributes.items():
             # Set only decleared attrs.
-            if hasattr(self.__class__, k):
+            if hasattr(self, k):
                 setattr(self, k, v)
         return self
 
