@@ -5,15 +5,17 @@
 <head>
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="{% static "js/bootstrap-notify.min.js" %}"></script>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>{% block title %}{% endblock %}</title>
 
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="{% static "js/animate.css" %}">
   {% block additional_head %}{% endblock %}
 </head>
 <body>
-<div class="container">
+<div class="container" id="root_container">
     <nav class="navbar navbar-inverse" id="navbar">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -37,11 +39,6 @@
         </div>
       </div>
       <div class="col-lg-9" id="content">
-        {% if messages %}
-          {% for message in messages %}
-          <div{% if message.tags %} class="alert {{ message.tags | to_alert_class }}" role="alert"{% endif %}>{{ message }}</div>
-          {% endfor %}
-        {% endif %}
         {% block content %}{% endblock %}
       </div>
     </div>
@@ -52,6 +49,28 @@
   </div>
 
   <script>
+    {% if messages %}
+      {% for message in messages %}
+        $.notify({
+          // options
+          message: '{{ message }}' 
+        },{
+          // settings
+          element: '#root_container',
+          placement: {
+            from: 'top',
+            align: 'center',
+          },
+          animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp',
+          },
+          {% if message.tags %}
+            type: '{{ message.tags }}'
+          {% endif %}
+        });
+      {% endfor %}
+    {% endif %}
   </script>
   {% block additional_body %}{% endblock %}
 </body>
