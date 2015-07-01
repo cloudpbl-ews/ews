@@ -1,16 +1,20 @@
 from django import forms
 from .models import VirtualMachine
 
+name_field = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}))
 
-memory_field = forms.ChoiceField(initial="1", choices = [(1,"1G"),(2,"2G"),(3,"3G"),(4,"4G"),(5,"5G"),(6,"6G"),(7,"7G"),(8,"8G")])
-cpu_field = forms.ChoiceField(initial="1", choices = [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)])
-disksize_field = forms.IntegerField(initial="50")
-bootdev_field = forms.ChoiceField(initial="cdrom", choices = [("cdrom","cdrom"),("hd","hd")])
+memorychoice = [(1,"1G"),(2,"2G"),(3,"3G"),(4,"4G"),(5,"5G"),(6,"6G"),(7,"7G"),(8,"8G")]
+memory_field = forms.ChoiceField(
+                   initial="1",
+                   choices = memorychoice,
+                   widget=forms.Select(attrs={'class': 'selectpicker'}))
 
-class CreateVM(forms.Form):
-    memorychoice = [(1,"1G"),(2,"2G"),(3,"3G"),(4,"4G"),(5,"5G"),(6,"6G"),(7,"7G"),(8,"8G")]
-    cpuchoice =[(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)]
-    oschoice = [
+cpu_field = forms.ChoiceField(
+                initial="1",
+                choices = [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8)],
+                widget=forms.Select(attrs={'class': 'selectpicker'}))
+
+oschoice = [
     ('CentOS',(
         ("CentOS-6.3-x86_64-minimal.iso", "CentOS-6.3-x86_64"),
         ("CentOS-6.6-x86_64-minimal.iso", "CentOS-6.6-x86_64"),
@@ -38,13 +42,28 @@ class CreateVM(forms.Form):
         ("Gentoo-install-amd64-minimal-20120223.iso", "Gentoo-install-amd64-minimal-20120223"),
         )
     )
-    ]
+]
+os_field = forms.ChoiceField(
+               choices = oschoice,
+               widget= forms.Select(attrs={'class': 'selectpicker', 'data-width':'auto'}))
 
-    name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}))
-    memorysize = forms.ChoiceField(initial="1", choices = memorychoice, widget=forms.Select(attrs={'class': 'selectpicker'}))
-    cpu = forms.ChoiceField(initial="1", choices = cpuchoice, widget=forms.Select(attrs={'class': 'selectpicker'}))
-    os = forms.ChoiceField(choices = oschoice, widget=forms.Select(attrs={'class': 'selectpicker', 'data-width':'auto'}))
-    disksize = forms.IntegerField(initial="50", widget=forms.NumberInput(attrs={'class' : 'form-control', 'data-width':'auto'}))
+disksize_field = forms.IntegerField(
+                     initial="50",
+                     widget=forms.NumberInput(
+                                attrs={'class' : 'form-control', 'data-width':'auto'}))
+
+bootdev_field = forms.ChoiceField(
+                    initial= "cdrom",
+                    choices = [("cdrom","CD-ROM"),("hd","HDD")],
+                    widget= forms.Select(attrs={'class': 'selectpicker', 'data-width':'auto'}))
+
+
+class CreateVM(forms.Form):
+    name = name_field
+    memorysize = memory_field
+    cpu = cpu_field
+    os = os_field
+    disksize = disksize_field
 
     def create_instance(self, user, vncport, passwd):
         attributes = self.cleaned_data
