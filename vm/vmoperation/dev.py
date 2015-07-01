@@ -1,11 +1,23 @@
 
 class VMOperator():
+    def destroy(self, uuid):
+        print 'destroy: '
+        print uuid
+
+    def start(self, uuid):
+        print 'poweron: '
+        print uuid
+
+    def shutdown(self, uuid):
+        print 'shutdown: '
+        print uuid
+
     def create_vm(self, xml):
         print 'vm_created: '
         print xml
 
     def get_vminfo(self, uuid) :
-        return {"name": uuid, "state": 'Stop', 'cpu': 1, "memorysize": 4, 'disksize': 50}
+        return {"state": 'Stop', 'cpu': 1, "memorysize": 4, 'disksize': 50}
 
     def create_storage(self, xml):
         print 'storage_created: '
@@ -22,10 +34,6 @@ class VMOperator():
     def start_by_hostname(self, hostname):
         print 'vm_: '
         print hostname
-
-    def destroy(self, uuid):
-        print 'destroy: '
-        print uuid
 
     def set_cpu(self, uuid, cpu_num) :
         print 'set_cpu: '
