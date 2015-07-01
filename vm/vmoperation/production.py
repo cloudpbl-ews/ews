@@ -180,7 +180,7 @@ class VMOperator():
                 source_element = disk_element.find('./source')
                 return source_element.attrib['file']
         else :
-          return None
+            return None
 
 if __name__ == '__main__':
     op = VMOperator()
