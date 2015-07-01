@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 {% load static from staticfiles %}
+{% load filters %}
 <html>
 <head>
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -36,6 +37,11 @@
         </div>
       </div>
       <div class="col-lg-9" id="content">
+        {% if messages %}
+          {% for message in messages %}
+          <div{% if message.tags %} class="alert {{ message.tags | to_alert_class }}" role="alert"{% endif %}>{{ message }}</div>
+          {% endfor %}
+        {% endif %}
         {% block content %}{% endblock %}
       </div>
     </div>

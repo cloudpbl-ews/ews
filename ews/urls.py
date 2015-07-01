@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from django.views.generic import TemplateView
+from . import signals
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html"), name='home'),
@@ -24,8 +25,8 @@ urlpatterns = [
     url(r'^login/$', 'django.contrib.auth.views.login',
         {'template_name': 'accounts/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
-        {'template_name': 'accounts/logged_out.html'}, name='logout'),
-    url(r'^accounts/', include('accounts.urls', namespace="accounts")),
+        {'next_page': '/'},
+        name='logout'),
     url(r'^vm/', include('vm.urls', namespace="vm")),
     url(r'^noVNC/', include('noVNC.urls', namespace="noVNC")),
 ]

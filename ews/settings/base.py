@@ -27,6 +27,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'templatetags.filters',
     'accounts',
     'vm',
     'noVNC',
@@ -97,5 +98,7 @@ STATICFILES_DIRS = (
   os.path.join(BASE_DIR, 'static'),
 )
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/vm'
 LOGIN_URL = '/login'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'

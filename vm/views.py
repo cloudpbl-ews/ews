@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.template import Context, loader, RequestContext
 from django.template.context_processors import csrf
+from django.contrib import messages
 
 from vmoperation import VMOperator
 from .forms import CreateVM, UpdateVM
@@ -33,7 +34,10 @@ def create_vm(request):
             vncport = VirtualMachineRecord.find_vnc_port()
             passwd = random_str = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(10)])
             f.create_instance(request.user, vncport, passwd).save()
-            return HttpResponseRedirect('success')
+            messages.success(request, 'Created VM successfully.')
+            return HttpResponseRedirect(reverse('vm:index'))
+        messages.error(request, 'Failed to create VM.')
+        return render(request, 'vm/create_vm.html', {'form': f})
     else:
         f = CreateVM()
         return render_to_response('vm/create_vm.html', {'form': f}, context_instance=RequestContext(request))
@@ -48,7 +52,8 @@ def delete_vm(request, vm_id):
         vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
         vm = VirtualMachine.from_record(vm_record)
         vm.delete()
-        return render_to_response('vm/delete_success.html')
+        messages.success(request, 'Deleted VM successfully.')
+        return HttpResponseRedirect(reverse('vm:index'))
     else :
         return HttpResponseForbidden()
 
@@ -61,8 +66,10 @@ def edit(request, vm_id):
         if f.is_valid():
             f.apply_update(vm)
             vm.save()
+            messages.success(request, 'Updated VM successfully.')
             return HttpResponseRedirect(reverse('vm:index'))
         else:
+            messages.error(request, 'Failed to update VM.')
             return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
     else:
         f = UpdateVM.from_model(vm)
