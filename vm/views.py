@@ -73,13 +73,10 @@ def edit(request, vm_id):
 OSlist = ["CentOS", "debian", "FreeBSD", "ubuntu", "arch", "Gentoo", "rasbian", "archbsd", "openbsd", "netbsd", "android"]
 
 def isCollect(osname, vms):
-    #TODO have to decide True or False from vm info
     for vm in vms:
-        pass
-        #if osname in vm.os:
-        #    return True
-    #return False
-    return True
+        if osname in vm.cdrom :
+            return True
+    return False
 
 @login_required
 def OScollection(request):

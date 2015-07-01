@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation
+from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation, VMFetchOperation
 import uuid
 
 def model_alias(name):
@@ -50,12 +50,14 @@ class VirtualMachine(object):
     memorysize = attribute(int)
     disksize = attribute(int)
     bootdev = attribute(str)
+    cdrom = attribute(str)
 
     def __init__(self, instance=None, attributes={}):
         if instance is None:
             self.instance = VirtualMachineRecord()
         else:
             self.instance = instance
+            VMFetchOperation(self).submit()
         self.update(attributes)
 
     def update(self, attributes = {}):

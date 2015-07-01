@@ -73,6 +73,19 @@ class VMUpdateOperation(VMOperationBase):
             self.vm.bootdev)
         self.__class__.get_operator().start(self.vm.uuid)
 
+class VMFetchOperation(VMOperationBase):
+    def __init__(self, vm):
+        self.vm = vm
+
+    def submit(self):
+        # TODO: Implement fetch operations(disksize)
+        print "hdd "+str(self.vm.disksize)
+
+        self.vm.cpu = self.__class__.get_operator().get_cpu(self.vm.uuid)
+        self.vm.memorysize = self.__class__.get_operator().get_memory(self.vm.uuid)/(1024*1024*1024)
+        self.vm.bootdev = self.__class__.get_operator().get_bootdev(self.vm.uuid)
+        self.vm.cdrom = self.__class__.get_operator().get_cdrom(self.vm.uuid)
+
 class VMSearchQuery(VMOperationBase):
     def __init__(self, uuid):
         self.uuid = uuid
