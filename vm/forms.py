@@ -72,20 +72,82 @@ class CreateVM(forms.Form):
         attributes['password'] = passwd
         return VirtualMachine(attributes=attributes)
 
-class UpdateVM(forms.Form):
-    memorysize = memory_field
+
+class UpdateHostname(forms.Form):
+    name = name_field
+
+    @classmethod
+    def from_model(cls, vm):
+        return cls(initial={
+          'name': vm.name,
+          })
+
+    def apply_update(self, vm):
+        return vm.update(self.cleaned_data)
+
+
+class UpdateCPU(forms.Form):
     cpu = cpu_field
-    disksize = disksize_field
+
+    @classmethod
+    def from_model(cls, vm):
+        return cls(initial={
+          'cpu': vm.cpu,
+          })
+
+    def apply_update(self, vm):
+        return vm.update(self.cleaned_data)
+
+
+class UpdateCDImage(forms.Form):
+    os = os_field
+
+    @classmethod
+    def from_model(cls, vm):
+        return cls(initial={
+          'os': vm.os,
+          })
+
+    def apply_update(self, vm):
+        return vm.update(self.cleaned_data)
+
+
+class UpdateBootdev(forms.Form):
     bootdev = bootdev_field
 
     @classmethod
     def from_model(cls, vm):
         return cls(initial={
-          'memorysize': vm.memorysize,
-          'cpu': vm.cpu,
-          'disksize': vm.disksize,
           'bootdev': vm.bootdev,
           })
 
     def apply_update(self, vm):
         return vm.update(self.cleaned_data)
+
+
+class UpdateMemorysize(forms.Form):
+    memorysize = memory_field
+
+    @classmethod
+    def from_model(cls, vm):
+        return cls(initial={
+          'memorysize': vm.memorysize,
+          })
+
+    def apply_update(self, vm):
+        return vm.update(self.cleaned_data)
+
+
+class AttachDisk(forms.Form):
+    disksize = disksize_field
+
+    @classmethod
+    def from_model(cls, vm):
+        return cls(initial={
+          'disksize': 10,
+          })
+
+    def apply_update(self, vm):
+        return vm.update(self.cleaned_data)
+
+
