@@ -75,7 +75,7 @@ def edit(request, vm_id):
         f = UpdateVM.from_model(vm)
         return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
 
-OSlist = ["CentOS", "debian", "FreeBSD", "ubuntu", "arch", "Gentoo", "archbsd", "openbsd", "netbsd", "android"]
+OSlist = ["CentOS", "debian", "FreeBSD", "ubuntu", "arch", "Gentoo", "ArchBSD", "openbsd", "netbsd", "android"]
 
 def isCollect(osname, vms):
     for vm in vms:

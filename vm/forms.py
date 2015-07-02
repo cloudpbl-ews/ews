@@ -44,7 +44,7 @@ oschoice = [
         ("openbsd-5.7.iso", "openbsd-5.7"),
         ("netbsd_6.1.5.iso", "netbsd_6.1.5"),
         ("android_x86_5.02.iso", "android_5.02"),
-        ("archbsd-x86_64-20140904.iso", "ArchBSD-x86_64"),
+        ("ArchBSD-x86_64-20140904.iso", "ArchBSD-x86_64"),
         )
     )
 ]
