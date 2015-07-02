@@ -37,10 +37,10 @@ def create_vm(request):
             messages.success(request, 'Created VM successfully.')
             return HttpResponseRedirect(reverse('vm:index'))
         messages.error(request, 'Failed to create VM.')
-        return render(request, 'vm/create_vm.html', {'form': f})
+        return render(request, 'vm/new.html', {'form': f})
     else:
         f = CreateVM()
-        return render_to_response('vm/create_vm.html', {'form': f}, context_instance=RequestContext(request))
+        return render(request, 'vm/new.html', {'form': f})
 
 @login_required
 def success(request):
