@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
+{% load static from staticfiles %}
+
 {% block title %}EWS - Top Page{% endblock %}
 
 {% block content %}
+<div class="text-center">
+  <img src="{% static "top/top_image.png" %}" style="width: 100%;">
+</div>
 {% endblock %}
