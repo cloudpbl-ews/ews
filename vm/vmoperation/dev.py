@@ -74,3 +74,6 @@ class VMOperator():
         print 'set_cdrom: '
         print uuid
         print cdrom
+
+    def get_storage_volume_info(self, name):
+        return { 'name': name, 'capacity': 80000000000 }

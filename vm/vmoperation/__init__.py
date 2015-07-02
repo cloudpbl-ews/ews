@@ -116,3 +116,16 @@ class VMPowerControl(VMOperationBase):
 
     def shutdown(self):
         self.__class__.get_operator().shutdown(self.vm.uuid)
+
+class VMStorageSearchQuery(VMOperationBase):
+    @classmethod
+    def by_vm(cls, vm):
+        # TODO: Support multiple storages
+        return cls(vm.name + '.img')
+
+    def __init__(self, name):
+        self.name = name
+
+    def search(self):
+        attrs = self.__class__.get_operator().get_storage_volume_info(self.name)
+        return attrs
