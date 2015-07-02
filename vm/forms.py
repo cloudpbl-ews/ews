@@ -35,11 +35,16 @@ oschoice = [
     ('ubuntu', (
         ("ubuntu-12.04-server-amd64.iso", "ubuntu-12.04-amd64"),
         ("ubuntu-14.04.2-server-amd64.iso", "ubuntu-14.04.2-amd64"),
+        ("ubuntu-15.04-server-amd64.iso", "ubuntu-15.04-amd64"),
         )
     ),
     ('other',(
         ("archlinux-2015.06.01-dual.iso", "archlinux-2015.06.01"),
         ("Gentoo-install-amd64-minimal-20120223.iso", "Gentoo-install-amd64-minimal-20120223"),
+        ("openbsd-5.7.iso", "openbsd-5.7"),
+        ("netbsd_6.1.5.iso", "netbsd_6.1.5"),
+        ("android_x86_5.02.iso", "android_5.02"),
+        ("archbsd-x86_64-20140904.iso", "ArchBSD-x86_64"),
         )
     )
 ]
