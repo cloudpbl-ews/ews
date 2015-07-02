@@ -30,6 +30,30 @@ def attribute(name, wrapper = (lambda x: x), doc = ''):
             self.attribute[name] = wrapper(val)
     return property(fget, fset)
 
+class State(object):
+    int_to_value = {
+        0 : 'NoState',
+        1 : 'Running',
+        2 : 'Blocked',
+        3 : 'Paused',
+        4 : 'Shutdowning',
+        5 : 'Shutoff',
+        6 : 'Crashed',
+        7 : 'PMSuspended',
+        8 : 'Last',
+    }
+
+    def __init__(self, value):
+        if value not in self.int_to_value:
+            value = 0
+        self._value = value
+
+    def __unicode__(self):
+        return self.int_to_value[self._value]
+
+    def is_running(self):
+        return self._value == 1
+
 class VirtualMachine(object):
     """
     Having full information about a virtual machine
@@ -48,7 +72,7 @@ class VirtualMachine(object):
     password = model_alias('password')
 
     # Define attributes' types
-    state = attribute('state', unicode)
+    state = attribute('state', State)
     cpu = attribute('cpu', int)
     os = attribute('os', unicode)
     memorysize = attribute('memorysize', int)
