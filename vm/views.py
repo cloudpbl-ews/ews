@@ -104,6 +104,7 @@ def power_on_vm(request, vm_id):
         vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
         vm = VirtualMachine.from_record(vm_record)
         vm.power_on()
+        messages.success(request, 'Started VM successfully.')
         return HttpResponseRedirect(reverse('vm:index'))
     else :
         return HttpResponseForbidden()
@@ -114,6 +115,7 @@ def shutdown_vm(request, vm_id):
         vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
         vm = VirtualMachine.from_record(vm_record)
         vm.shutdown()
+        messages.success(request, 'Shutdowned VM successfully.')
         return HttpResponseRedirect(reverse('vm:index'))
     else :
         return HttpResponseForbidden()
