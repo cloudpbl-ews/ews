@@ -29,4 +29,5 @@ urlpatterns = [
         name='logout'),
     url(r'^vm/', include('vm.urls', namespace="vm")),
     url(r'^noVNC/', include('noVNC.urls', namespace="noVNC")),
+    url(r'^OScollection/', include('vm.urls', namespace="OScollection")),
 ]

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation
+from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation, VMFetchOperation
 import uuid
 
 def model_alias(name):
@@ -12,19 +12,23 @@ def model_alias(name):
         return setattr(self.instance, name, val)
     return property(fget, fset)
 
-def attribute(wrapper = (lambda x: x), doc = ''):
+def attribute(name, wrapper = (lambda x: x), doc = ''):
     "Define a property always having the specified type"
-    class container():
-        value = None
-        def fget(cont, self):
-            return cont.value
-        def fset(cont, self, val):
-            if val is None:
-                cont.value = None
-            else:
-                cont.value = wrapper(val)
-    dummy = container()
-    return property(dummy.fget, dummy.fset)
+    def fget(self):
+        if not hasattr(self, 'attribute') :
+            self.attribute = {}
+        if name in self.attribute :
+            return self.attribute[name]
+        else :
+            return None
+    def fset(self, val):
+        if not hasattr(self, 'attribute') :
+            self.attribute = {}
+        if val is None:
+            self.attribute[name] = None
+        else:
+            self.attribute[name] = wrapper(val)
+    return property(fget, fset)
 
 class VirtualMachine(object):
     """
@@ -44,19 +48,24 @@ class VirtualMachine(object):
     password = model_alias('password')
 
     # Define attributes' types
-    state = attribute(unicode)
-    cpu = attribute(int)
-    os = attribute(unicode)
-    memorysize = attribute(int)
-    disksize = attribute(int)
-    bootdev = attribute(str)
+    state = attribute('state', unicode)
+    cpu = attribute('cpu', int)
+    os = attribute('os', unicode)
+    memorysize = attribute('memorysize', int)
+    disksize = attribute('disksize', int)
+    bootdev = attribute('bootdev', str)
+    cdrom = attribute('cdrom', str)
 
     def __init__(self, instance=None, attributes={}):
         if instance is None:
             self.instance = VirtualMachineRecord()
         else:
             self.instance = instance
+
         self.update(attributes)
+
+        if not self.is_new() :
+            VMFetchOperation(self).submit()
 
     def update(self, attributes = {}):
         for k, v in attributes.items():

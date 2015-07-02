@@ -41,3 +41,19 @@ class VMOperator():
         print 'set_bootdev: '
         print uuid
         print bootdev
+
+    def get_cpu(self, uuid) :
+        print 'get_cpu: '
+        print uuid
+
+    def set_memory(self, uuid) :
+        print 'get_cpu: '
+        print uuid
+
+    def get_bootdev(self, uuid) :
+        print 'get_bootdev: '
+        print uuid
+
+    def get_cdrom(self, uuid) :
+        print 'get_cdrom: '
+        print uuid

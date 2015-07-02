@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^success$', views.success, name='success'),
     url(r'^(?P<vm_id>[0-9]+)/delete$', views.delete_vm, name='delete'),
     url(r'^(?P<vm_id>[0-9]+)/edit$', views.edit, name='edit'),
+    url(r'^OS-collection$', views.OScollection, name='OScollection'),
     url(r'^(?P<vm_id>[0-9]+)$', views.info, name='info'),
 ]

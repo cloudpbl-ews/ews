@@ -138,6 +138,15 @@ class VMOperator():
 
         self.con.defineXML(ET.tostring(xml))
 
+    def get_bootdev(self, uuid) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        first_boot_element = xml.find('.//boot')
+
+        return first_boot_element.attrib['dev']
+
+        self.con.defineXML(ET.tostring(xml))
+
     def get_cpu(self, uuid) :
         vm = self.con.lookupByUUID(uuid.bytes)
         xml = ET.fromstring(vm.XMLDesc(0))
@@ -162,6 +171,16 @@ class VMOperator():
         graphic_element.attrib['websocket'] = str(port)
         dom.updateDeviceFlags(ET.tostring(graphic_element), 0)
         self.con.defineXML(ET.tostring(xml))
+
+    def get_cdrom(self, uuid) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        for disk_element in xml.findall('.//disk') :
+            if disk_element.attrib['device'] == "cdrom" :
+                source_element = disk_element.find('./source')
+                return source_element.attrib['file']
+        else :
+            return None
 
 if __name__ == '__main__':
     op = VMOperator()

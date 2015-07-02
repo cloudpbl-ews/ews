@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}EWS - OS collection{% endblock %}
+
+{% block additional_head %}
+{% endblock %}
+{% block content %}
+
+<center><img src="{% static "OScollection/png/OScollection_title.jpg" %}" class="img-responsive" alt="Responsive image"/></center>
+
+<tr>
+{% if oslist %}
+    <table class="table table-striped table-bordered">
+    {% for os in oslist %}
+       {% if os.have %}
+      
+            <td><img src="{% static "OScollection/png/" %}{{os.name}}.png" class="img-responsive" alt="Responsive image"/></td>
+      
+       {% else %}
+             <td><img src="{% static "OScollection/png/" %}{{os.name}}_not.png" class="img-responsive" alt="Responsive image"/></td>
+      
+       {% endif %}
+    {% ifequal forloop.counter 4 %}
+    </tr>
+    <tr>
+    {% endifequal %}
+    {% ifequal forloop.counter 8 %}
+    </tr>
+    <tr>
+    {% endifequal %}
+    
+    
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}
