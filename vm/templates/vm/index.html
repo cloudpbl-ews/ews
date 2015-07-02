@@ -213,18 +213,18 @@ $(function () { StartTimer(); });
 </script>
 
 {% if vms %}
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered text-center">
   <tr>
-    <td>VMname</td>
+    <td>VM Name</td>
     <td>Display</td>
-    <td>state</td>
-    <td width="100%">CPUusage</td>
+    <td>State</td>
+    <td width="100%">CPU Usage</td>
     <td>Controls</td>
     <td>Delete</td>
   </tr>
   {% for vm in vms %}
   <tr>
-    <td><center><a href="{% url 'vm:info' vm_id=vm.id %}">{{vm.name}}</a></center></td>
+    <td><a href="{% url 'vm:info' vm_id=vm.id %}">{{vm.name}}</a></td>
     <td><a href="{% url 'noVNC:index' vm_id=vm.id %}"  ><center><img src="{% static "vm/png/glyphicons-87-display.png" %}" class="img-responsive" alt="Responsive image"/></center></a></td>
     <td> {{ vm.state }}</td>
     <td data-cpuusage="{% for cpu in cpus %}{% if forloop.last %}{{vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
