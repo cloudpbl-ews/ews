@@ -89,6 +89,9 @@ class VirtualMachine(object):
     def is_new(self):
         return self.uuid is None
 
+    def is_running(self):
+        return self.state.is_running()
+
     def delete(self):
         VMDeleteOperation(self).submit()
         self.instance.delete()
