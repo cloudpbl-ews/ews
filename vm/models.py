@@ -74,11 +74,11 @@ class VirtualMachine(object):
     # Define attributes' types
     state = attribute('state', State)
     cpu = attribute('cpu', int)
-    os = attribute('os', unicode)
     memorysize = attribute('memorysize', int)
     disksize = attribute('disksize', int)
     bootdev = attribute('bootdev', str)
     cdrom = attribute('cdrom', str)
+    os = attribute('os', str)
 
     def __init__(self, instance=None, attributes={}):
         if instance is None:

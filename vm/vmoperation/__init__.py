@@ -6,6 +6,7 @@ else:
 
 from .. import tool
 import uuid
+import os.path
 
 class VMOperationBase():
     @classmethod
@@ -47,7 +48,7 @@ class VMCreateOperation(VMOperationBase):
           uuid = self.get_uuid(),
           memorysize = self.vm.get_memorysize_kilobyte(),
           cpu = self.vm.cpu,
-          image_file = self.vm.os,
+          image_file = self.vm.cdrom,
           macaddr = self.get_macaddr(),
           websocketport = self.vm.vncport,
           passwd = self.vm.password)
@@ -71,6 +72,8 @@ class VMUpdateOperation(VMOperationBase):
             self.vm.memorysize*1024*1024*1024)
         self.__class__.get_operator().set_bootdev(self.vm.uuid,
             self.vm.bootdev)
+        self.__class__.get_operator().set_cdrom(self.vm.uuid,
+            self.vm.cdrom)
         self.__class__.get_operator().start(self.vm.uuid)
 
 class VMFetchOperation(VMOperationBase):
@@ -85,6 +88,7 @@ class VMFetchOperation(VMOperationBase):
         self.vm.memorysize = self.__class__.get_operator().get_memory(self.vm.uuid)/(1024*1024*1024)
         self.vm.bootdev = self.__class__.get_operator().get_bootdev(self.vm.uuid)
         self.vm.cdrom = self.__class__.get_operator().get_cdrom(self.vm.uuid)
+        self.vm.os = os.path.basename(self.vm.cdrom)
 
 class VMSearchQuery(VMOperationBase):
     def __init__(self, uuid):

@@ -68,3 +68,9 @@ class VMOperator():
     def get_cdrom(self, uuid) :
         print 'get_cdrom: '
         print uuid
+        return 'path/to/isofile'
+
+    def set_cdrom(self, uuid, cdrom) :
+        print 'set_cdrom: '
+        print uuid
+        print cdrom

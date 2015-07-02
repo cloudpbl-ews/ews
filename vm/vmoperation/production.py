@@ -182,6 +182,16 @@ class VMOperator():
         else :
             return None
 
+    def set_cdrom(self, uuid, cdrom) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        for disk_element in xml.findall('.//disk') :
+            if disk_element.attrib['device'] == "cdrom" :
+                source_element = disk_element.find('./source')
+                source_element.attrib['file'] = cdrom
+                self.con.defineXML(ET.tostring(xml))
+                return
+
 if __name__ == '__main__':
     op = VMOperator()
     for uuid in op.get_vmlist() :

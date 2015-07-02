@@ -60,8 +60,6 @@ def delete_vm(request, vm_id):
     else :
         return HttpResponseForbidden()
 
-
-
 OSlist = ["CentOS", "debian", "FreeBSD", "ubuntu", "arch", "Gentoo", "rasbian", "archbsd", "openbsd", "netbsd", "android"]
 def isCollect(osname, vms):
     for vm in vms:
