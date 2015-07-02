@@ -22,8 +22,15 @@ def index(request):
     vms = [VirtualMachine.from_record(vm) for vm in vm_records]
     # This `cpus` indicates which cpu data should be rendered for each vm.
     # TODO: Fetch which cpu is used by each vm.
-    cpus = [1]
-    return render(request, 'vm/index.html', {'vms': vms, 'cpus': cpus, 'HYPERVISOR_URL': settings.HYPERVISOR_URL})
+    print "I wnat to know", vms[0].cpu
+    vms_for_index = []
+    for vm in vms:
+        cpulist = []
+        for i in range(1, vm.cpu+1):
+            cpulist.append(i)
+        vms_for_index.append({"vm":vm, "cpulist":cpulist})
+    #return render(request, 'vm/index.html', {'vms': vms, 'cpus': cpus, 'HYPERVISOR_URL': settings.HYPERVISOR_URL})
+    return render(request, 'vm/index.html', {'vms_for_index': vms_for_index, 'HYPERVISOR_URL': settings.HYPERVISOR_URL})
 
 @login_required
 def create_vm(request):

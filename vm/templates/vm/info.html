@@ -2,23 +2,33 @@
 {% load static from staticfiles %}
 {% block title %}EWS - VM info - {{ vm.name }}{% endblock %}
 {% block content %}
-<h3>Basic Status</h3>
+
+<style>
+span#type1_right {
+    float: right;
+}
+</style>
+
 <table class="table table-striped table-bordered">
   <tr>
     <td>VM Name</td>
-    <td>{{vm.name}}</td>
+    <td>{{vm.name}} <a href="{% url 'vm:edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit" aria-hidden="true" id="type1_right" ></span></a></td>
   </tr>
   <tr>
     <td>CPU</td>
-    <td>{{vm.cpu}}</td>
+    <td>{{vm.cpu}} <a href="{% url 'vm:edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit" aria-hidden="true" id="type1_right" ></span></a></td>
   </tr>
   <tr>
-    <td>OS</td>
-    <td>{{vm.os}}</td>
+    <td>cd image</td>
+    <td>{{vm.os}} <a href="{% url 'vm:edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit" aria-hidden="true" id="type1_right" ></span></a></td>
+  </tr>
+  <tr>
+    <td>boot device</td>
+    <td>{{vm.os}} <a href="{% url 'vm:edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit" aria-hidden="true" id="type1_right" ></span></a></td>
   </tr>
   <tr>
     <td>Memory Size</td>
-    <td>{{vm.memorysize}}</td>
+    <td>{{vm.memorysize}} <a href="{% url 'vm:edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit" aria-hidden="true" id="type1_right" ></span></a></td>
   </tr>
   <tr>
     <td>State</td>
@@ -27,7 +37,7 @@
 </table>
 
 <!-- TODO show from vm -->
-<h3>Disk</h3>
+<h3>Disk  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  </h3>
         <table class="table table-striped table-bordered">
         <thead>
           <tr>

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}EWS - edit VM - {{ vm.name }}{% endblock %}
+
+{% block content %}
+
+{% url 'vm:edit' vm.id as form_url %}
+{% include 'vm/_form.html' with url=form_url form=form %}
+
+{% endblock %}
