@@ -6,6 +6,7 @@
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="{% static "js/bootstrap-notify.min.js" %}"></script>
+  <script src="{% static "js/application.js" %}"></script>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>{% block title %}{% endblock %}</title>
 
@@ -62,7 +63,7 @@
       {% for message in messages %}
         $.notify({
           // options
-          message: '{{ message }}' 
+          message: '{{ message }}'
         },{
           // settings
           element: '#root_container',
