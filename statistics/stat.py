@@ -2,8 +2,9 @@ import libvirt
 import os
 import time
 import rrdtool
+from django.conf import settings
 
-hypervisor_url = "qemu+tls://157.82.3.111/system"
+hypervisor_url = "qemu+tls://" + settings.HYPERVISOR_URL + "/system"
 
 statpath = "./static/statistics/data/"
 cpurrdpath = statpath + "cpu/"
