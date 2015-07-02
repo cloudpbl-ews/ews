@@ -103,11 +103,9 @@ class VirtualMachine(object):
 
     def power_on(self):
         VMPowerControl(self).power_on()
-        return ***
-        
+
     def shutdown(self):
         VMPowerControl(self).shutdown()
-	return ***
 
 class VirtualMachineRecord(models.Model):
     """ A record class whose instance is saved in the database. """
