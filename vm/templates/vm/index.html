@@ -230,7 +230,7 @@ $(function () { StartTimer(); });
     <td data-cpuusage="{% for cpu in cpus %}{% if forloop.last %}{{vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
     <td><a href="{% url 'vm:edit' vm_id=vm.id %}">Edit</a></td>
     <td>
-    <form method="post" action="{% url 'vm:delete' vm_id=vm.id %}">
+    <form class="form-danger" method="post" action="{% url 'vm:delete' vm_id=vm.id %}" data-confirm="削除してもよろしいですか？">
       {% csrf_token %}
     <button type="submit" class="btn btn-danger">Delete</button>
     </form>
