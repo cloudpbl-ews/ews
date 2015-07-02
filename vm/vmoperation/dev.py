@@ -17,7 +17,7 @@ class VMOperator():
         print xml
 
     def get_vminfo(self, uuid) :
-        return {"state": 'Stop', 'cpu': 1, "memorysize": 4, 'disksize': 50}
+        return {"state": 1, 'cpu': 1, "memorysize": 4000, 'disksize': 50}
 
     def create_storage(self, xml):
         print 'storage_created: '
@@ -53,14 +53,17 @@ class VMOperator():
     def get_cpu(self, uuid) :
         print 'get_cpu: '
         print uuid
+        return 1
 
-    def set_memory(self, uuid) :
-        print 'get_cpu: '
+    def get_memory(self, uuid) :
+        print 'get_memory: '
         print uuid
+        return 2000
 
     def get_bootdev(self, uuid) :
         print 'get_bootdev: '
         print uuid
+        return 'hd'
 
     def get_cdrom(self, uuid) :
         print 'get_cdrom: '
