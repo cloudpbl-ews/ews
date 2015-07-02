@@ -102,3 +102,13 @@ class VMDeleteOperation(VMOperationBase):
     def submit(self):
         self.__class__.get_operator().destroy(self.vm.uuid)
         self.__class__.get_operator().undefine_vm(self.vm.uuid)
+
+class VMPowerControl(VMOperationBase):
+    def __init__(self, vm):
+        self.vm = vm
+
+    def power_on(self):
+        self.__class__.get_operator().start(self.vm.uuid)
+
+    def shutdown(self):
+        self.__class__.get_operator().shutdown(self.vm.uuid)

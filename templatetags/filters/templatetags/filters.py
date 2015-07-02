@@ -13,3 +13,7 @@ def to_alert_class(value):
         'error': 'alert-danger',
     }
     return key_dict[value]
+
+@register.assignment_tag
+def get_vm_is_running(vm):
+    return vm.is_running

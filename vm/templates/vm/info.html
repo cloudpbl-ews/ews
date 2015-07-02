@@ -20,6 +20,10 @@
     <td>Memory Size</td>
     <td>{{vm.memorysize}}</td>
   </tr>
+  <tr>
+    <td>State</td>
+    <td>{{vm.state}} {% include 'vm/_powercontrol.html' with vm=vm %}</td>
+  </tr>
 </table>
 
 <!-- TODO show from vm -->
