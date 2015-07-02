@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation, VMFetchOperation
+from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation, VMFetchOperation, VMPowerControl
 import uuid
 
 def model_alias(name):
@@ -100,6 +100,10 @@ class VirtualMachine(object):
     def get_memorysize_kilobyte(self):
         # a unit of disksize is giga byte.
         return 1024 * 1024 * self.memorysize
+
+    def power_on(self):
+        VMPowerControl(self).power_on
+        
 
 class VirtualMachineRecord(models.Model):
     """ A record class whose instance is saved in the database. """
