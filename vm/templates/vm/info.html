@@ -26,7 +26,6 @@
   </tr>
 </table>
 
-<!-- TODO show from vm -->
 <h3>Disk</h3>
         <table class="table table-striped table-bordered">
         <thead>
@@ -37,16 +36,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>disk1</td>
-            <td>10GB</td>
-          </tr>
-            <td>2</td>
-            <td>disk2</td>
-            <td>20GB</td>
-          <tr>
-          </tr>
+          {% for storage in vm.storages %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ storage.name }}</td>
+              <td>{{ storage.get_gigabyte_size }} GB</td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
 

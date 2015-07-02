@@ -182,6 +182,16 @@ class VMOperator():
         else :
             return None
 
+    def get_storage_volume_info(self, name):
+        pool = self.get_storage_pool('default')
+        vol = pool.storageVolLookupByName(name)
+        info = vol.info()
+        # http://libvirt.org/html/libvirt-libvirt-storage.html#virStorageVolInfo
+        return { 'name': name, 'capacity': info[1] }
+
+    def get_storage_pool(self, name):
+        return self.con.storagePoolLookupByName(name)
+
 if __name__ == '__main__':
     op = VMOperator()
     for uuid in op.get_vmlist() :
