@@ -102,8 +102,12 @@ class VirtualMachine(object):
         return 1024 * 1024 * self.memorysize
 
     def power_on(self):
-        VMPowerControl(self).power_on
+        VMPowerControl(self).power_on()
+        return ***
         
+    def shutdown(self):
+        VMPowerControl(self).shutdown()
+	return ***
 
 class VirtualMachineRecord(models.Model):
     """ A record class whose instance is saved in the database. """

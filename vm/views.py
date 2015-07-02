@@ -100,7 +100,7 @@ def info(request, vm_id):
 
 @login_required
 def power_on_vm(request, vm_id):
- if(request.method == 'POST'):
+    if(request.method == 'POST'):
         vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
         vm = VirtualMachine.from_record(vm_record)
         vm.power_on()
@@ -110,7 +110,7 @@ def power_on_vm(request, vm_id):
 
 @login_required
 def shutdown_vm(request, vm_id):
- if(request.method == 'POST'):
+    if(request.method == 'POST'):
         vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
         vm = VirtualMachine.from_record(vm_record)
         vm.shutdown()
