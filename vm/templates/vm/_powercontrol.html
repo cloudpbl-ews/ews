@@ -9,6 +9,6 @@
 {% else %}
   <form method="post" action="{% url 'vm:power_on' vm_id=vm.id %}" class="post-button pull-right">
     {% csrf_token %}
-    <button type="submit" class="btn btn-default">Power On</button>
+    <button type="submit" class="btn btn-primary">Power On</button>
   </form>
 {% endif %}

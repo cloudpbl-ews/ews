@@ -74,7 +74,7 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
     </disk>
     <disk type='file' device='cdrom'>
     <driver name='qemu'/>
-      <source file='/var/lib/libvirt/iso/{image_file:s}' />
+      <source file='{image_file:s}' />
       <target dev='hdc' bus='ide'/>
       <readonly/>
     </disk>

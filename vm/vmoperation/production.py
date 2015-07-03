@@ -182,6 +182,16 @@ class VMOperator():
         else :
             return None
 
+    def set_cdrom(self, uuid, cdrom) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        for disk_element in xml.findall('.//disk') :
+            if disk_element.attrib['device'] == "cdrom" :
+                source_element = disk_element.find('./source')
+                source_element.attrib['file'] = cdrom
+                self.con.defineXML(ET.tostring(xml))
+                return
+
     def get_storage_volume_info(self, name):
         pool = self.get_storage_pool('default')
         vol = pool.storageVolLookupByName(name)
