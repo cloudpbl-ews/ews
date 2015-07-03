@@ -8,16 +8,15 @@
 {% endblock %}
 {% block content %}
 
-
-    <style type="text/css">
+<style type="text/css">
   .highcharts-tooltip>span {
-  	background: white;
-  	border: 1px solid silver;
-  	border-radius: 3px;
-  	box-shadow: 1px 1px 2px #888;
-  	padding: 8px;
+    background: white;
+    border: 1px solid silver;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #888;
+    padding: 8px;
   }
-  </style>
+</style>
 
 <script src="{% static "statistics/js/highcharts.js" %}"></script>
 <script type="text/javascript">
@@ -139,7 +138,7 @@ $(function () {
                     }
                 },
                 chart: chart,
-                colors: ['#008ECF','#F0EA30','#70BE47', '#F82F66', '#F55A21' ]
+                colors: ['#0000FF','#FF0000','#00FF00', '#FFFF00', '#00FFFF', '#FF00FF']
             });
 
       }
@@ -161,12 +160,8 @@ $(function () {
                        plotdata[j] = Number(data[j].split(":")[1]);
                      }
                   }
-                  if(idx in drawlist){
-                    drawlist[idx].push({data: plotdata});
-                  }else{
-                    drawlist[idx] = [];
-                    drawlist[idx].push({data: plotdata});
-                  }
+                  cpunum = Number(urlname.split(".")[1]);
+                  drawlist[idx][cpunum-1].data = plotdata;
               }
             });
     }
@@ -181,6 +176,17 @@ $(function () {
     }
 
     function SendRequest() {
+
+        for (idx = 0; idx < $tds.length; idx += 1) {
+            $td = $($tds[idx]);
+            stringdata = $td.data('cpuusage');
+            stringdata = stringdata.split(",");
+            drawlist[idx] = [];
+            for(cpu = 0; cpu < stringdata.length; cpu++){
+              drawlist[idx].push({data: 0});
+            }
+        }
+
         for (idx = 0; idx < $tds.length; idx += 1) {
             parseCpuUsage(idx);
         }
@@ -191,7 +197,7 @@ var StartTimer, StopTimer, Timer, time, timerID;
 timerID = 0;
 
 StartTimer = function() {
-  Timer();
+  SendRequest();
   timerID = setInterval(Timer/*定期的に呼び出す関数名*/, 3000/*呼び出す間隔*/);
 };
 
@@ -212,29 +218,28 @@ $(function () { StartTimer(); });
 });
 </script>
 
-{% if vms %}
+{% if vms_for_index %}
 <table class="table table-striped table-bordered text-center">
   <tr>
     <td>VM Name</td>
     <td>Display</td>
     <td>State</td>
-    <td width="100%">CPU Usage</td>
     <td>Controls</td>
+    <td width="100%">CPU Usage</td>
     <td>Delete</td>
   </tr>
-  {% for vm in vms %}
+  {% for vm_for_index in vms_for_index %}
   <tr>
-    <td><a href="{% url 'vm:info' vm_id=vm.id %}">{{vm.name}}</a></td>
-    <td><a href="{% url 'noVNC:index' vm_id=vm.id %}"  ><center><img src="{% static "vm/png/glyphicons-87-display.png" %}" class="img-responsive" alt="Responsive image"/></center></a></td>
-    <td> {{ vm.state }}</td>
-    <td data-cpuusage="{% for cpu in cpus %}{% if forloop.last %}{{vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
-    <td><a href="{% url 'vm:edit' vm_id=vm.id %}">Edit</a></td>
-    <td>
-    <form class="form-danger" method="post" action="{% url 'vm:delete' vm_id=vm.id %}" data-confirm="削除してもよろしいですか？">
-      {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Delete</button>
-    </form>
+    <td><a href="{% url 'vm:info' vm_id=vm_for_index.vm.id %}">{{vm_for_index.vm.name}}</a></td>
+    <td><a href="{% url 'noVNC:index' vm_id=vm_for_index.vm.id %}"><img src="{% static "vm/png/glyphicons-87-display.png" %}" class="img-responsive" alt="Responsive image"/></a></td>
+    <td>{{ vm_for_index.vm.state }}</td>
+    <td>{% include 'vm/_powercontrol.html' with vm=vm_for_index.vm %}</td>
+    <td data-cpuusage="{% for cpu in vm_for_index.cpulist %}{% if forloop.last %}{{vm_for_index.vm.uuid}}.{{forloop.counter}}.txt"{% else %}{{vm_for_index.vm.uuid}}.{{forloop.counter}}.txt,{% endif %}{% endfor %}/>
     </td>
+    <td><form class="form-danger" method="post" action="{% url 'vm:delete' vm_id=vm_for_index.vm.id %}" data-confirm="削除してもよろしいですか？">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form></td>
   </tr>
 {% endfor %}
 </table>

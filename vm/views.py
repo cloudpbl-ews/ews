@@ -7,7 +7,7 @@ from django.template.context_processors import csrf
 from django.contrib import messages
 
 from vmoperation import VMOperator
-from .forms import CreateVM, UpdateVM
+from .forms import CreateVM, UpdateHostname, UpdateCPU, UpdateCDImage, UpdateBootdev, UpdateMemorysize, AttachDisk
 from .models import VirtualMachine, VirtualMachineRecord
 
 from django.conf import settings
@@ -20,10 +20,13 @@ import random
 def index(request):
     vm_records = request.user.virtualmachinerecord_set.all()
     vms = [VirtualMachine.from_record(vm) for vm in vm_records]
-    # This `cpus` indicates which cpu data should be rendered for each vm.
-    # TODO: Fetch which cpu is used by each vm.
-    cpus = [1]
-    return render(request, 'vm/index.html', {'vms': vms, 'cpus': cpus, 'HYPERVISOR_URL': settings.HYPERVISOR_URL})
+    vms_for_index = []
+    for vm in vms:
+        cpulist = []
+        for i in range(1, vm.cpu+1):
+            cpulist.append(i)
+        vms_for_index.append({"vm":vm, "cpulist":cpulist})
+    return render(request, 'vm/index.html', {'vms_for_index': vms_for_index, 'HYPERVISOR_URL': settings.HYPERVISOR_URL})
 
 @login_required
 def create_vm(request):
@@ -56,24 +59,6 @@ def delete_vm(request, vm_id):
         return HttpResponseRedirect(reverse('vm:index'))
     else :
         return HttpResponseForbidden()
-
-@login_required
-def edit(request, vm_id):
-    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
-    vm = VirtualMachine.from_record(vm_record)
-    if(request.method == 'POST'):
-        f = UpdateVM(request.POST)
-        if f.is_valid():
-            f.apply_update(vm)
-            vm.save()
-            messages.success(request, 'Updated VM successfully.')
-            return HttpResponseRedirect(reverse('vm:index'))
-        else:
-            messages.error(request, 'Failed to update VM.')
-            return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
-    else:
-        f = UpdateVM.from_model(vm)
-        return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
 
 OSlist = ["CentOS", "debian", "FreeBSD", "ubuntu", "arch", "Gentoo", "ArchBSD", "openbsd", "netbsd", "android"]
 
@@ -119,3 +104,113 @@ def shutdown_vm(request, vm_id):
         return HttpResponseRedirect(reverse('vm:index'))
     else :
         return HttpResponseForbidden()
+
+
+@login_required
+def hostname_edit(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    if(request.method == 'POST'):
+        f = UpdateHostname(request.POST)
+        if f.is_valid():
+            f.apply_update(vm)
+            vm.save()
+            messages.success(request, 'Updated VM successfully.')
+            return HttpResponseRedirect(reverse('vm:index'))
+        else:
+            messages.error(request, 'Failed to update VM.')
+            return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+    else:
+        f = UpdateHostname.from_model(vm)
+        return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+
+
+@login_required
+def cpu_edit(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    if(request.method == 'POST'):
+        f = UpdateCPU(request.POST)
+        if f.is_valid():
+            f.apply_update(vm)
+            vm.save()
+            messages.success(request, 'Updated VM successfully.')
+            return HttpResponseRedirect(reverse('vm:index'))
+        else:
+            messages.error(request, 'Failed to update VM.')
+            return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+    else:
+        f = UpdateCPU.from_model(vm)
+        return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+
+@login_required
+def cd_image_edit(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    if(request.method == 'POST'):
+        f = UpdateCDImage(request.POST)
+        if f.is_valid():
+            f.apply_update(vm)
+            vm.save()
+            messages.success(request, 'Updated VM successfully.')
+            return HttpResponseRedirect(reverse('vm:index'))
+        else:
+            messages.error(request, 'Failed to update VM.')
+            return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+    else:
+        f = UpdateCDImage.from_model(vm)
+        return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+
+@login_required
+def bootdev_edit(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    if(request.method == 'POST'):
+        f = UpdateBootdev(request.POST)
+        if f.is_valid():
+            f.apply_update(vm)
+            vm.save()
+            messages.success(request, 'Updated VM successfully.')
+            return HttpResponseRedirect(reverse('vm:index'))
+        else:
+            messages.error(request, 'Failed to update VM.')
+            return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+    else:
+        f = UpdateBootdev.from_model(vm)
+        return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+
+@login_required
+def memorysize_edit(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    if(request.method == 'POST'):
+        f = UpdateMemorysize(request.POST)
+        if f.is_valid():
+            f.apply_update(vm)
+            vm.save()
+            messages.success(request, 'Updated VM successfully.')
+            return HttpResponseRedirect(reverse('vm:index'))
+        else:
+            messages.error(request, 'Failed to update VM.')
+            return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+    else:
+        f = UpdateMemorysize.from_model(vm)
+        return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+
+@login_required
+def attach_disk(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    if(request.method == 'POST'):
+        f = AttachDisk(request.POST)
+        if f.is_valid():
+            f.apply_update(vm)
+            vm.save()
+            messages.success(request, 'Updated VM successfully.')
+            return HttpResponseRedirect(reverse('vm:index'))
+        else:
+            messages.error(request, 'Failed to update VM.')
+            return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
+    else:
+        f = AttachDisk.from_model(vm)
+        return render(request, 'vm/edit.html', {'form': f, 'vm': vm})

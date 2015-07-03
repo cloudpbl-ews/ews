@@ -2,10 +2,11 @@ import libvirt
 import os
 import time
 import rrdtool
+from django.conf import settings
 
-hypervisor_url = "qemu+tls://157.82.3.111/system"
+hypervisor_url = "qemu+tls://" + settings.HYPERVISOR_URL + "/system"
 
-statpath = "../static/statistics/data/"
+statpath = "./static/statistics/data/"
 cpurrdpath = statpath + "cpu/"
 cpuusagepath = statpath + "cpuusage/"
 cpupngpath= statpath + "cpupng/"
@@ -139,24 +140,3 @@ class StatCollector():
                     updateCpuRRD(uuid, cpuid, curtime, cpuutil)
                 self.cputimes[cpukey] = vcpus[cpuid]["cputime"]
                 self.lastupdatecpu[cpukey] = curtime
-
-
-if __name__ == "__main__":
-    stat = StatCollector()
-    i = 0
-    while True:
-        try:
-            stat.UpdateVMlist()
-            stat.CollectStat()
-            if i == 0 or i % 6 ==0:
-                rrd2plain()
-            if i == 20 or i % 3600 == 0:
-                rrd2png()
-            time.sleep(1)
-            if i >= 3600:
-                i = 0
-            i+=1
-        except KeyboardInterrupt:
-            break
-        except Exception as e:
-            print "Exception ", e

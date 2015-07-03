@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation, VMFetchOperation, VMPowerControl
+from .vmoperation import VMCreateOperation, VMSearchQuery, VMUpdateOperation, VMDeleteOperation, VMFetchOperation, VMPowerControl, VMStorageSearchQuery
 import uuid
 
 def model_alias(name):
@@ -54,6 +54,23 @@ class State(object):
     def is_running(self):
         return self._value == 1
 
+class Storage(object):
+    name = attribute('name', str)
+    size = attribute('size', long)
+
+    @classmethod
+    def fetch(cls, vm):
+        # TODO: Support multiple storages
+        res = VMStorageSearchQuery.by_vm(vm).search()
+        return cls(res['name'], res['capacity'])
+
+    def __init__(self, name, bytesize):
+        self.name = name
+        self.size = bytesize
+
+    def get_gigabyte_size(self):
+        return self.size / (1024 * 1024 * 1024)
+
 class VirtualMachine(object):
     """
     Having full information about a virtual machine
@@ -74,11 +91,12 @@ class VirtualMachine(object):
     # Define attributes' types
     state = attribute('state', State)
     cpu = attribute('cpu', int)
-    os = attribute('os', unicode)
     memorysize = attribute('memorysize', int)
     disksize = attribute('disksize', int)
     bootdev = attribute('bootdev', str)
     cdrom = attribute('cdrom', str)
+    os = attribute('os', str)
+    storages = attribute('storages')
 
     def __init__(self, instance=None, attributes={}):
         if instance is None:
@@ -90,6 +108,7 @@ class VirtualMachine(object):
 
         if not self.is_new() :
             VMFetchOperation(self).submit()
+            self.storages = [Storage.fetch(self)]
 
     def update(self, attributes = {}):
         for k, v in attributes.items():
