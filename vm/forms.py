@@ -35,11 +35,16 @@ cdromchoice = [
     ('ubuntu', (
         ("/var/lib/libvirt/iso/ubuntu-12.04-server-amd64.iso", "ubuntu-12.04-amd64"),
         ("/var/lib/libvirt/iso/ubuntu-14.04.2-server-amd64.iso", "ubuntu-14.04.2-amd64"),
+        ("/var/lib/libvirt/iso/ubuntu-15.04-server-amd64.iso", "ubuntu-15.04-amd64"),
         )
     ),
     ('other',(
         ("/var/lib/libvirt/iso/archlinux-2015.06.01-dual.iso", "archlinux-2015.06.01"),
         ("/var/lib/libvirt/iso/Gentoo-install-amd64-minimal-20120223.iso", "Gentoo-install-amd64-minimal-20120223"),
+        ("/var/lib/libvirt/iso/openbsd-5.7.iso", "openbsd-5.7"),
+        ("/var/lib/libvirt/iso/netbsd_6.1.5.iso", "netbsd_6.1.5"),
+        ("/var/lib/libvirt/iso/android_x86_5.02.iso", "android_5.02"),
+        ("/var/lib/libvirt/iso/ArchBSD-x86_64-20140904.iso", "ArchBSD-x86_64"),
         )
     )
 ]
