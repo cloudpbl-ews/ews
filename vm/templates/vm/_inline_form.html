@@ -1,0 +1,10 @@
+
+<form class="form-inline" action="{{ url }}" method="post"> {% csrf_token %}
+  {% for field in form %}
+    <div class="form-group">
+      {{ field.errors }}
+      {{ field }}
+    </div>
+  {% endfor %}
+  <button class="btn btn-default" type="submit">Submit</button>
+</form>

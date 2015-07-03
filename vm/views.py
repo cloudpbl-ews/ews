@@ -78,12 +78,6 @@ def OScollection(request):
     return render(request, 'vm/OScollection.html', {"oslist": collectlist})
 
 @login_required
-def info(request, vm_id):
-    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
-    vm = VirtualMachine.from_record(vm_record)
-    return render(request, 'vm/info.html', {'vm': vm})
-
-@login_required
 def power_on_vm(request, vm_id):
     if(request.method == 'POST'):
         vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
@@ -105,6 +99,18 @@ def shutdown_vm(request, vm_id):
     else :
         return HttpResponseForbidden()
 
+@login_required
+def info(request, vm_id):
+    vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+    vm = VirtualMachine.from_record(vm_record)
+    forms = {
+        'hostname': UpdateHostname.from_model(vm),
+        'cpu': UpdateCPU.from_model(vm),
+        'cd_image': UpdateCDImage.from_model(vm),
+        'bootdev': UpdateBootdev.from_model(vm),
+        'memorysize': UpdateMemorysize.from_model(vm),
+    }
+    return render(request, 'vm/info.html', {'vm': vm, 'forms': forms })
 
 @login_required
 def hostname_edit(request, vm_id):

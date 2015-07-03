@@ -6,23 +6,38 @@
 <table class="table table-striped table-bordered">
   <tr>
     <td>VM Name</td>
-    <td>{{vm.name}} <a href="{% url 'vm:hostname_edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></td>
+    <td>
+      {% url 'vm:hostname_edit' vm_id=vm.id as hostname_edit_url %}
+      {% include 'vm/_editable_cell.html' with value=vm.name url=hostname_edit_url form=forms.hostname %}
+    </td>
   </tr>
   <tr>
     <td>CPU</td>
-    <td>{{vm.cpu}} <a href="{% url 'vm:cpu_edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></td>
+    <td>
+      {% url 'vm:cpu_edit' vm_id=vm.id as cpu_edit_url %}
+      {% include 'vm/_editable_cell.html' with value=vm.cpu url=cpu_edit_url form=forms.cpu %}
+    </td>
   </tr>
   <tr>
     <td>CD Image</td>
-    <td>{{vm.os}} <a href="{% url 'vm:cd_image_edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></td>
+    <td>
+      {% url 'vm:cd_image_edit' vm_id=vm.id as cd_image_edit_url %}
+      {% include 'vm/_editable_cell.html' with value=vm.os url=cd_image_edit_url form=forms.cd_image %}
+    </td>
   </tr>
   <tr>
     <td>Boot Device</td>
-    <td>{{vm.bootdev}} <a href="{% url 'vm:bootdev_edit' vm_id=vm.id %}"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></td>
+    <td>
+      {% url 'vm:bootdev_edit' vm_id=vm.id as bootdev_edit_url %}
+      {% include 'vm/_editable_cell.html' with value=vm.bootdev url=bootdev_edit_url form=forms.bootdev %}
+    </td>
   </tr>
   <tr>
     <td>Memory Size</td>
-    <td>{{vm.memorysize}} <a href="{% url 'vm:memorysize_edit' vm_id=vm.id  %}"><span class="glyphicon glyphicon-edit pull-right" aria-hidden="true"></span></a></td>
+    <td>
+      {% url 'vm:memorysize_edit' vm_id=vm.id as memorysize_edit_url %}
+      {% include 'vm/_editable_cell.html' with value=vm.memorysize url=memorysize_edit_url form=forms.memorysize %}
+    </td>
   </tr>
   <tr>
     <td>State</td>
