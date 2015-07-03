@@ -116,7 +116,7 @@ def hostname_edit(request, vm_id):
             f.apply_update(vm)
             vm.save()
             messages.success(request, 'Updated VM successfully.')
-            return HttpResponseRedirect(reverse('vm:index'))
+            return HttpResponseRedirect(reverse('vm:info', kwargs={ 'vm_id': vm.id }))
         else:
             messages.error(request, 'Failed to update VM.')
             return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
@@ -135,7 +135,7 @@ def cpu_edit(request, vm_id):
             f.apply_update(vm)
             vm.save()
             messages.success(request, 'Updated VM successfully.')
-            return HttpResponseRedirect(reverse('vm:index'))
+            return HttpResponseRedirect(reverse('vm:info', kwargs={ 'vm_id': vm.id }))
         else:
             messages.error(request, 'Failed to update VM.')
             return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
@@ -153,7 +153,7 @@ def cd_image_edit(request, vm_id):
             f.apply_update(vm)
             vm.save()
             messages.success(request, 'Updated VM successfully.')
-            return HttpResponseRedirect(reverse('vm:index'))
+            return HttpResponseRedirect(reverse('vm:info', kwargs={ 'vm_id': vm.id }))
         else:
             messages.error(request, 'Failed to update VM.')
             return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
@@ -171,7 +171,7 @@ def bootdev_edit(request, vm_id):
             f.apply_update(vm)
             vm.save()
             messages.success(request, 'Updated VM successfully.')
-            return HttpResponseRedirect(reverse('vm:index'))
+            return HttpResponseRedirect(reverse('vm:info', kwargs={ 'vm_id': vm.id }))
         else:
             messages.error(request, 'Failed to update VM.')
             return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
@@ -189,7 +189,7 @@ def memorysize_edit(request, vm_id):
             f.apply_update(vm)
             vm.save()
             messages.success(request, 'Updated VM successfully.')
-            return HttpResponseRedirect(reverse('vm:index'))
+            return HttpResponseRedirect(reverse('vm:info', kwargs={ 'vm_id': vm.id }))
         else:
             messages.error(request, 'Failed to update VM.')
             return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
@@ -207,7 +207,7 @@ def attach_disk(request, vm_id):
             f.apply_update(vm)
             vm.save()
             messages.success(request, 'Updated VM successfully.')
-            return HttpResponseRedirect(reverse('vm:index'))
+            return HttpResponseRedirect(reverse('vm:info', kwargs={ 'vm_id': vm.id }))
         else:
             messages.error(request, 'Failed to update VM.')
             return render(request, 'vm/edit.html', {'form': f, 'vm': vm})
