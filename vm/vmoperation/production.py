@@ -153,6 +153,22 @@ class VMOperator():
         graphic_element = xml.find('./vcpu')
         return int(graphic_element.text)
 
+    def get_interfaces(self, uuid) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        interface_list = xml.findall('.//interface')
+        interfaces = []
+        for interface in interface_list:
+            interfacedic = {}
+            interfacedic["type"] = interface.attrib["type"]
+            for element in interface:
+                if element.tag == "mac":
+                    interfacedic["mac"] = element.attrib["address"]
+                if element.tag == "source":
+                    interfacedic["source"] = element.attrib["bridge"]
+            interfaces.append(interfacedic)
+        return interfaces
+
     def get_memory(self, uuid) :
         vm = self.con.lookupByUUID(uuid.bytes)
         xml = ET.fromstring(vm.XMLDesc(0))

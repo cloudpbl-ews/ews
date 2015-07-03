@@ -89,6 +89,7 @@ class VMFetchOperation(VMOperationBase):
         self.vm.bootdev = self.__class__.get_operator().get_bootdev(self.vm.uuid)
         self.vm.cdrom = self.__class__.get_operator().get_cdrom(self.vm.uuid)
         self.vm.os = os.path.basename(self.vm.cdrom)
+        self.vm.interfaces = self.__class__.get_operator().get_interfaces(self.vm.uuid)
 
 class VMSearchQuery(VMOperationBase):
     def __init__(self, uuid):
