@@ -1,0 +1,7 @@
+<div class="editable-cell">
+  <a href="{{ url }}" class="switch-edit pull-right">
+    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+  </a>
+  <div class="editable-cell-info">{{ value }}</div>
+  <div class="editable-cell-edit">{% include 'vm/_inline_form.html' with url=url form=form %}</div>
+</div>
