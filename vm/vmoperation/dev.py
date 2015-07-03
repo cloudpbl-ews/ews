@@ -77,3 +77,6 @@ class VMOperator():
 
     def get_storage_volume_info(self, name):
         return { 'name': name, 'capacity': 80000000000 }
+
+    def get_interfaces(self, uuid) :
+        return []
