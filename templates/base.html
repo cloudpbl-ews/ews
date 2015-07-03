@@ -3,25 +3,21 @@
 {% load filters %}
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <script src="{% static "js/bootstrap-notify.min.js" %}"></script>
   <script src="{% static "js/application.js" %}"></script>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>{% block title %}{% endblock %}</title>
   <script src="{% static "vm/js/bootstrap-select.min.js" %}"></script>
 
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-  <link rel="stylesheet" href="{% static "js/animate.css" %}">
-  <style type="text/css">
-    form.post-button {
-      display: inline-block;
-    }
-    .table tbody tr td{
-      vertical-align: middle;
-    }
-  </style>
+  <link rel="stylesheet" href="{% static "css/animate.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static "vm/css/bootstrap-select.min.css" %}">
+  <link rel="stylesheet" href="{% static "css/application.css" %}">
+
   {% block additional_head %}{% endblock %}
 </head>
 <body>
