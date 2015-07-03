@@ -6,7 +6,7 @@
 <table class="table table-striped table-bordered">
   <tr>
     <td>VM Name</td>
-    <td>
+    <td width="60%">
       {% url 'vm:hostname_edit' vm_id=vm.id as hostname_edit_url %}
       {% include 'vm/_editable_cell.html' with value=vm.name url=hostname_edit_url form=forms.hostname %}
     </td>
