@@ -2,12 +2,16 @@
 
 {% get_vm_is_running vm as running %}
 {% if running %}
-  <form method="post" action="{% url 'vm:shutdown' vm_id=vm.id %}" class="post-button pull-right">
+  <form method="post" action="{% url 'vm:shutdown' vm_id=vm.id %}" class="post-button">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Shutdown</button>
   </form>
+  <form method="post" action="{% url 'vm:force_shutdown' vm_id=vm.id %}" class="form-danger post-button" data-confirm="強制シャットダウンしてもよろしいですか？">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Force Shutdown</button>
+  </form>
 {% else %}
-  <form method="post" action="{% url 'vm:power_on' vm_id=vm.id %}" class="post-button pull-right">
+  <form method="post" action="{% url 'vm:power_on' vm_id=vm.id %}" class="post-button">
     {% csrf_token %}
     <button type="submit" class="btn btn-primary">Power On</button>
   </form>

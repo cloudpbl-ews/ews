@@ -153,6 +153,9 @@ class VirtualMachine(object):
     def shutdown(self):
         VMPowerControl(self).shutdown()
 
+    def force_shutdown(self):
+        VMPowerControl(self).force_shutdown()
+
 class VirtualMachineRecord(models.Model):
     """ A record class whose instance is saved in the database. """
     user = models.ForeignKey(User)
