@@ -59,10 +59,9 @@ class Storage(object):
     size = attribute('size', long)
 
     @classmethod
-    def fetch(cls, vm):
-        # TODO: Support multiple storages
+    def fetch_by_vm(cls, vm):
         res = VMStorageSearchQuery.by_vm(vm).search()
-        return cls(res['name'], res['capacity'])
+        return [cls(attrs['name'], attrs['capacity']) for attrs in res]
 
     def __init__(self, name, bytesize):
         self.name = name
@@ -97,6 +96,7 @@ class VirtualMachine(object):
     cdrom = attribute('cdrom', str)
     os = attribute('os', str)
     storages = attribute('storages')
+    interfaces = attribute('interfaces')
 
     def __init__(self, instance=None, attributes={}):
         if instance is None:
@@ -108,7 +108,7 @@ class VirtualMachine(object):
 
         if not self.is_new() :
             VMFetchOperation(self).submit()
-            self.storages = [Storage.fetch(self)]
+            self.storages = Storage.fetch_by_vm(self)
 
     def update(self, attributes = {}):
         for k, v in attributes.items():

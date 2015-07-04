@@ -23,13 +23,16 @@ class VMOperator():
             raise
 
     def start(self, uuid) :
-        os.system("virsh -c {:s} start {:s}".format(self.hypervisor_url, str(uuid)))
+        vm = self.con.lookupByUUID(uuid.bytes)
+        vm.create()
 
     def shutdown(self, uuid) :
-        os.system("virsh -c {:s} shutdown {:s}".format(self.hypervisor_url, str(uuid)))
+        vm = self.con.lookupByUUID(uuid.bytes)
+        vm.shutdown()
 
     def reboot(self, uuid) :
-        os.system("virsh -c {:s} reboot {:s}".format(self.hypervisor_url, str(uuid)))
+        vm = self.con.lookupByUUID(uuid.bytes)
+        vm.reboot()
 
     def show_vminfo(self, uuid) :
         vm = self.con.lookupByUUID(uuid.bytes)
@@ -57,11 +60,13 @@ class VMOperator():
     def start_by_hostname(self, hostname) :
         self.con.lookupByName(hostname).create()
 
-    def destroy(self, uuid) :
-        os.system("virsh -c {:s} destroy {:s}".format(self.hypervisor_url, str(uuid)))
+    def force_shutdown(self, uuid) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        vm.destroy()
 
     def undefine_vm(self, uuid) :
-        os.system("virsh -c {:s} undefine {:s} --remove-all-storage".format(self.hypervisor_url, str(uuid)))
+        vm = self.con.lookupByUUID(uuid.bytes)
+        vm.undefine()
 
     def get_vminfo(self, uuid) :
         print "uuid", uuid
@@ -208,15 +213,30 @@ class VMOperator():
                 self.con.defineXML(ET.tostring(xml))
                 return
 
-    def get_storage_volume_info(self, name):
-        pool = self.get_storage_pool('default')
-        vol = pool.storageVolLookupByName(name)
+    def get_storages_info_by_vm(self, uuid) :
+        vm = self.con.lookupByUUID(uuid.bytes)
+        xml = ET.fromstring(vm.XMLDesc(0))
+        storages = []
+        for disk_element in xml.findall('.//disk') :
+            if disk_element.attrib['device'] == "disk" :
+                source_element = disk_element.find('./source')
+                path = source_element.attrib['file']
+                vol_info = self.get_storage_volume_info(path)
+                storages.append(vol_info)
+        return storages
+
+    def get_storage_volume_info(self, path):
+        vol = self.con.storageVolLookupByPath(path)
         info = vol.info()
         # http://libvirt.org/html/libvirt-libvirt-storage.html#virStorageVolInfo
-        return { 'name': name, 'capacity': info[1] }
+        return { 'name': vol.name(), 'path': vol.path(),'capacity': info[1] }
 
     def get_storage_pool(self, name):
         return self.con.storagePoolLookupByName(name)
+
+    def delete_storage(self, path) :
+        vol = self.con.storageVolLookupByPath(path)
+        vol.delete()
 
 if __name__ == '__main__':
     op = VMOperator()
