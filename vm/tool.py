@@ -17,19 +17,17 @@ def GenMac():
             random.randint(0x00, 0xff) ]
     return ':'.join(map(lambda x: "%02x" % x, mac))
 
-
-
 def StorageXMLGen(hostname, disksize):
-    return """
+    xml_str = """
 <volume type='file'>
   <name>{hostname:s}.img</name>
-  <key> /var/lib/libvirt/images/{hostname:s}.img</key>
+  <key>_</key>
   <source>
   </source>
-  <capacity unit='bytes'>{disksize:d}</capacity>
-  <allocation unit='bytes'>{disksize:d}</allocation>
+  <capacity unit='bytes'>_</capacity>
+  <allocation unit='bytes'>_</allocation>
   <target>
-    <path>/var/lib/libvirt/images/{hostname:s}.img</path>
+    <path>_</path>
     <format type='raw'/>
     <permissions>
       <mode>0600</mode>
@@ -37,19 +35,32 @@ def StorageXMLGen(hostname, disksize):
       <group>112</group>
     </permissions>
   </target>
-</volume>""".format(hostname=hostname,
-        disksize=disksize)
+</volume>"""
 
+    xml = ET.fromstring(xml_str)
+    #name
+    name_element = xml.find('./name')
+    name_element.text = '{:s}.img'.format(hostname)
+    #disksize
+    capacity_element = xml.find('./capacity')
+    capacity_element.text = '{:d}'.format(disksize)
+    allocation_element = xml.find('./allocation')
+    allocation_element.text = '{:d}'.format(disksize)
+    #path
+    path_element = xml.find('.//path')
+    path_element.text = '/var/lib/libvirt/images/{:s}.img'.format(hostname)
+
+    return ET.tostring(xml)
 
 def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport, passwd):
       #<source file='/root/vmimage/{hostname:s}.img'/>
-    return """
+    xml_str = """
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
-  <name>{hostname:s}</name>
-  <uuid>{uuid:s}</uuid>
-  <memory unit='KiB'>{memorysize:d}</memory>
-  <currentMemory unit='KiB'>{memorysize:d}</currentMemory>
-  <vcpu placement='static'>{cpu:d}</vcpu>
+  <name>_</name>
+  <uuid>_</uuid>
+  <memory unit='KiB'>_</memory>
+  <currentMemory unit='KiB'>_</currentMemory>
+  <vcpu placement='static'>_</vcpu>
   <os>
     <type arch='x86_64' machine='pc-i440fx-1.7'>hvm</type>
     <boot dev='hd'/>
@@ -68,13 +79,13 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
   <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw'/>
-      <source file='/var/lib/libvirt/images/{hostname:s}.img'/>
+      <source file='_'/>
       <target dev='hda' bus='ide'/>
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
     </disk>
     <disk type='file' device='cdrom'>
-    <driver name='qemu'/>
-      <source file='{image_file:s}' />
+      <driver name='qemu'/>
+      <source file='_' />
       <target dev='hdc' bus='ide'/>
       <readonly/>
     </disk>
@@ -86,7 +97,7 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
       <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
     </controller>
     <interface type='bridge'>
-      <mac address='{macaddr:s}'/>
+      <mac address='_'/>
       <source bridge='br0'/>
       <model type='e1000'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
@@ -99,7 +110,7 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
     </console>
     <input type='mouse' bus='ps2'/>
     <input type='keyboard' bus='ps2'/>
-    <graphics type="vnc"  websocket="{websocketport:d}" passwd="{passwd:s}" listen="0.0.0.0"/>
+    <graphics type="vnc"  websocket="_" passwd="_" listen="0.0.0.0"/>
     <sound model='ich6'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
     </sound>
@@ -111,14 +122,42 @@ def VMXMLGen(hostname, uuid, memorysize, cpu, image_file, macaddr, websocketport
       <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
     </memballoon>
   </devices>
-</domain>""".format(hostname=hostname,
-        uuid=uuid,
-        memorysize=memorysize,
-        cpu=cpu,
-        image_file=image_file,
-        macaddr=macaddr,
-        websocketport=websocketport,
-        passwd=passwd)
+</domain>"""
+
+    xml = ET.fromstring(xml_str)
+    #name
+    name_element = xml.find('./name')
+    name_element.text = '{:s}'.format(hostname)
+    #uuid
+    uuid_element = xml.find('./uuid')
+    uuid_element.text = '{:s}'.format(uuid)
+    #memory
+    memory_element = xml.find('./memory')
+    memory_element.text = '{:d}'.format(memorysize)
+    currentMemory_element = xml.find('./currentMemory')
+    currentMemory_element.text = '{:d}'.format(memorysize)
+    #cpu
+    vcpu_element = xml.find('./vcpu')
+    vcpu_element.text = '{:d}'.format(cpu)
+    #hd
+    for disk_element in xml.findall('.//disk') :
+        if disk_element.attrib['device'] == 'disk' :
+            source_element = disk_element.find('./source')
+            source_element.attrib['file'] = '/var/lib/libvirt/images/{:s}.img'.format(hostname)
+        #cdrom
+        if disk_element.attrib['device'] == 'cdrom' :
+            source_element = disk_element.find('./source')
+            source_element.attrib['file'] = '{:s}'.format(image_file)
+    #if
+    interface_element = xml.find('.//interface')
+    mac_element = interface_element.find('./mac')
+    mac_element.attrib['address']= '{:s}'.format(macaddr)
+    #vnc
+    graphics_element = xml.find('.//graphics')
+    graphics_element.attrib['websocket']= '{:d}'.format(websocketport)
+    graphics_element.attrib['passwd']= '{:s}'.format(passwd)
+
+    return ET.tostring(xml)
 
 # Generate xml of network interface card for virtual machine
 # type: contant, source: the name of bridge or network, model: 'virtio' or 'e1000'
