@@ -2,13 +2,24 @@
 
 {% get_vm_is_running vm as running %}
 {% if running %}
-  <form method="post" action="{% url 'vm:shutdown' vm_id=vm.id %}" class="post-button">
+  <div class="btn-group">
+    <button type="button" class="btn btn-danger" onclick="document.shutdown{{vm.id}}.submit()">Shutdown</button>
+    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul  class="dropdown-menu">
+      <li><a onclick="document.shutdown{{vm.id}}.submit()">Shutdown</a></li>
+      <li><a onclick="document.forceshutdown{{vm.id}}.submit()">Force Shutdown</a></li>
+    </ul>
+  </div>
+
+  <!-- hidden -->
+  <form style="display:none;" method="post" action="{% url 'vm:shutdown' vm_id=vm.id %}" name="shutdown{{vm.id}}">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Shutdown</button>
   </form>
-  <form method="post" action="{% url 'vm:force_shutdown' vm_id=vm.id %}" class="form-danger post-button" data-confirm="強制シャットダウンしてもよろしいですか？">
+  <form style="display:none;" method="post" action="{% url 'vm:force_shutdown' vm_id=vm.id %}" name="forceshutdown{{vm.id}}" data-confirm="強制シャットダウンしてもよろしいですか？">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Force Shutdown</button>
   </form>
 {% else %}
   <form method="post" action="{% url 'vm:power_on' vm_id=vm.id %}" class="post-button">
