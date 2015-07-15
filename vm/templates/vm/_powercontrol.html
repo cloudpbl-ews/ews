@@ -10,7 +10,7 @@
     </button>
     <ul  class="dropdown-menu">
       <li><a onclick="document.shutdown{{vm.id}}.submit()">Shutdown</a></li>
-      <li><a onclick="document.forceshutdown{{vm.id}}.submit()">Force Shutdown</a></li>
+      <li><a id="forceshutdown{{vm.id}}">Force Shutdown</a></li>
     </ul>
   </div>
 
@@ -18,9 +18,18 @@
   <form style="display:none;" method="post" action="{% url 'vm:shutdown' vm_id=vm.id %}" name="shutdown{{vm.id}}">
     {% csrf_token %}
   </form>
-  <form style="display:none;" method="post" action="{% url 'vm:force_shutdown' vm_id=vm.id %}" name="forceshutdown{{vm.id}}" data-confirm="強制シャットダウンしてもよろしいですか？">
+  <form style="display:none;" method="post" action="{% url 'vm:force_shutdown' vm_id=vm.id %}" name="forceshutdown{{vm.id}}">
     {% csrf_token %}
   </form>
+  <script>
+  $(function(){
+    $("#forceshutdown{{vm.id}}").click(function(){
+      if(confirm("強制シャットダウンしてもよろしいですか？")){
+        document.forceshutdown{{vm.id}}.submit();
+      }
+    });
+  });
+  </script>
 {% else %}
   <form method="post" action="{% url 'vm:power_on' vm_id=vm.id %}" class="post-button">
     {% csrf_token %}
