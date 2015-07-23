@@ -63,10 +63,7 @@ class VMUpdateOperation(VMOperationBase):
         self.vm = vm
 
     def submit(self):
-        # TODO: Implement update operations(disksize)
-        print "hdd "+str(self.vm.disksize)
-
-        self.__class__.get_operator().destroy(self.vm.uuid)
+        self.__class__.get_operator().force_shutdown(self.vm.uuid)
         self.__class__.get_operator().set_cpu(self.vm.uuid, self.vm.cpu)
         self.__class__.get_operator().set_memory(self.vm.uuid,
             self.vm.memorysize*1024*1024*1024)
@@ -81,9 +78,6 @@ class VMFetchOperation(VMOperationBase):
         self.vm = vm
 
     def submit(self):
-        # TODO: Implement fetch operations(disksize)
-        print "hdd "+str(self.vm.disksize)
-
         self.vm.cpu = self.__class__.get_operator().get_cpu(self.vm.uuid)
         self.vm.memorysize = self.__class__.get_operator().get_memory(self.vm.uuid)/(1024*1024*1024)
         self.vm.bootdev = self.__class__.get_operator().get_bootdev(self.vm.uuid)
@@ -105,7 +99,10 @@ class VMDeleteOperation(VMOperationBase):
         self.vm = vm
 
     def submit(self):
-        self.__class__.get_operator().destroy(self.vm.uuid)
+        self.__class__.get_operator().force_shutdown(self.vm.uuid)
+        storages = self.__class__.get_operator().get_storages_info_by_vm(self.vm.uuid)
+        for storage in storages :
+            self.__class__.get_operator().delete_storage(storage['path'])
         self.__class__.get_operator().undefine_vm(self.vm.uuid)
 
 class VMPowerControl(VMOperationBase):
@@ -121,12 +118,10 @@ class VMPowerControl(VMOperationBase):
 class VMStorageSearchQuery(VMOperationBase):
     @classmethod
     def by_vm(cls, vm):
-        # TODO: Support multiple storages
-        return cls(vm.name + '.img')
+        return cls(vm.uuid)
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, vm_uuid):
+        self.vm_uuid = vm_uuid
 
     def search(self):
-        attrs = self.__class__.get_operator().get_storage_volume_info(self.name)
-        return attrs
+        return self.__class__.get_operator().get_storages_info_by_vm(self.vm_uuid)

@@ -1,7 +1,7 @@
 
 class VMOperator():
-    def destroy(self, uuid):
-        print 'destroy: '
+    def fource_shutdown(self, uuid):
+        print 'force_shutdown: '
         print uuid
 
     def start(self, uuid):
@@ -75,8 +75,18 @@ class VMOperator():
         print uuid
         print cdrom
 
-    def get_storage_volume_info(self, name):
-        return { 'name': name, 'capacity': 80000000000 }
+    def get_storages_info_by_vm(self, uuid) :
+        print 'get_storages_info_by_vm: '
+        print uuid
+
+    def get_storage_volume_info(self, path):
+        print 'get_storages_volume_info: '
+        print path
+        return { 'name': name, 'path': '/path/to/imgfile', 'capacity': 80000000000 }
+
+    def delete_storage(self, path) :
+        print 'delete_storage: '
+        print path
 
     def get_interfaces(self, uuid) :
         return []
