@@ -24,6 +24,12 @@ $(function () {
         return confirm($(this).data('confirm'));
     });
 
+    $(".click-confirm").click(function(){
+      if(confirm($(this).data('confirm'))){
+        eval($(this).data('success'));
+      }
+    });
+
     $('.selectpicker').selectpicker({
         'selectedText': 'cat',
     });
