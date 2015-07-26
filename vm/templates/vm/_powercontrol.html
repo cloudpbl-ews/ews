@@ -9,8 +9,8 @@
       <span class="sr-only">Toggle Dropdown</span>
     </button>
     <ul  class="dropdown-menu">
-      <li><a onclick="document.shutdown{{vm.id}}.submit()">Shutdown</a></li>
-      <li><a class="click-confirm" data-confirm="強制シャットダウンしてもよろしいですか？" data-success="document.forceshutdown{{vm.id}}.submit()" >Force Shutdown</a></li>
+      <li><a class="form-submit" data-form-name="shutdown{{vm.id}}">Shutdown</a></li>
+      <li><a class="form-submit-confirm" data-confirm="強制シャットダウンしてもよろしいですか？" data-form-name="forceshutdown{{vm.id}}" >Force Shutdown</a></li>
     </ul>
   </div>
 

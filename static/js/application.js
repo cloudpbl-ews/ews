@@ -24,9 +24,13 @@ $(function () {
         return confirm($(this).data('confirm'));
     });
 
-    $(".click-confirm").click(function(){
+    $(".form-submit").click(function(){
+      eval($(this).data('form-name')).submit();
+    });
+
+    $(".form-submit-confirm").click(function(){
       if(confirm($(this).data('confirm'))){
-        eval($(this).data('success'));
+        eval($(this).data('form-name')).submit();
       }
     });
 
