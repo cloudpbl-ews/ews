@@ -25,12 +25,12 @@ $(function () {
     });
 
     $(".form-submit").click(function(){
-      eval($(this).data('form-name')).submit();
+      document[$(this).data('form-name')].submit();
     });
 
     $(".form-submit-confirm").click(function(){
       if(confirm($(this).data('confirm'))){
-        eval($(this).data('form-name')).submit();
+        document[$(this).data('form-name')].submit();
       }
     });
 
