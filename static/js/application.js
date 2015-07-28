@@ -24,6 +24,16 @@ $(function () {
         return confirm($(this).data('confirm'));
     });
 
+    $(".form-submit").click(function(){
+      document[$(this).data('form-name')].submit();
+    });
+
+    $(".form-submit-confirm").click(function(){
+      if(confirm($(this).data('confirm'))){
+        document[$(this).data('form-name')].submit();
+      }
+    });
+
     $('.selectpicker').selectpicker({
         'selectedText': 'cat',
     });

@@ -115,6 +115,9 @@ class VMPowerControl(VMOperationBase):
     def shutdown(self):
         self.__class__.get_operator().shutdown(self.vm.uuid)
 
+    def force_shutdown(self):
+        self.__class__.get_operator().destroy(self.vm.uuid)
+
 class VMStorageSearchQuery(VMOperationBase):
     @classmethod
     def by_vm(cls, vm):

@@ -100,6 +100,17 @@ def shutdown_vm(request, vm_id):
         return HttpResponseForbidden()
 
 @login_required
+def force_shutdown_vm(request, vm_id):
+    if(request.method == 'POST'):
+        vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
+        vm = VirtualMachine.from_record(vm_record)
+        vm.force_shutdown()
+        messages.success(request, 'Force shutdowned VM successfully.')
+        return HttpResponseRedirect(reverse('vm:index'))
+    else :
+        return HttpResponseForbidden()
+
+@login_required
 def info(request, vm_id):
     vm_record = get_object_or_404(VirtualMachineRecord, pk=vm_id)
     vm = VirtualMachine.from_record(vm_record)
